@@ -35,9 +35,9 @@ attack_s4_s:
     cancel_frame: 80
 attack_s3_s:
   flags:
-    move: false
+    move: true
   extra:
-    cancel_frame: 43
+    cancel_frame: 51
 fall_special:
   blend_frames: 5
 attack_air_f:
@@ -96,3 +96,61 @@ special_air_s_start:
 catch_attack:
   extra:
     cancel_frame: 0
+special_lw_cancel:
+  game_script: game_speciallwcancel
+  flags:
+    turn: true
+    loop: false
+    move: false
+    fix_trans: false
+    fix_rot: false
+    fix_scale: false
+    unk_40: false
+    unk_80: true
+    unk_100: false
+    unk_200: false
+    unk_400: false
+    unk_800: false
+    unk_1000: false
+    unk_2000: false
+  blend_frames: 0
+  animations:
+  - name: d03speciallwcancel.nuanmb
+  scripts:
+  - expression_speciallwcancel
+  - sound_speciallwcancel
+  - effect_speciallwcancel
+  extra:
+    intangible_start_frame: 0
+    intangible_end_frame: 0
+    cancel_frame: 18
+    freeze_during_hitstop: false
+special_lw_max_spin:
+  game_script: game_speciallwmaxspin
+  flags:
+    turn: false
+    loop: false
+    move: true
+    fix_trans: false
+    fix_rot: false
+    fix_scale: false
+    unk_40: false
+    unk_80: false
+    unk_100: false
+    unk_200: false
+    unk_400: false
+    unk_800: false
+    unk_1000: false
+    unk_2000: false
+  blend_frames: 0
+  animations:
+  - name: d03speciallwmaxspin.nuanmb
+  scripts:
+  - expression_speciallwmaxspin
+  - sound_speciallwmaxspin
+  - effect_speciallwmaxspin
+  extra:
+    intangible_start_frame: 0
+    intangible_end_frame: 0
+    cancel_frame: 105
+    freeze_during_hitstop: false

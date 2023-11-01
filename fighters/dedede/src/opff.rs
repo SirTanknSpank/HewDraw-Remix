@@ -134,6 +134,26 @@ unsafe fn super_jump_fail_edge_cancel(fighter: &mut L2CFighterCommon){
     }
 }
 
+unsafe fn stored_jet_helper(fighter: &mut L2CFighterCommon){
+    if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
+        ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_heavyattack"), true);
+        ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_halfblink4"), true);
+        let hammer_eff = EffectModule::req_follow(fighter.boma(), Hash40::new("sys_magicball_aura"), Hash40::new("hammer2"), &Vector3f{x: 0.0, y: 0.0, z: 0.0}, &Vector3f{x: 0.0, y: 0.0, z: 0.0}, 1.75, false, 0, 0, 0, 0, 0, false, false) as u32;
+
+        if VarModule::get_int(fighter.battle_object, vars::dedede::instance::JET_TIMER) == 0{
+            DamageModule::add_damage(fighter.boma(), 3.0, 0);
+            VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 60);
+        }
+        //if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_STORED_EFFECT_FLAG){
+            //EffectModule::set_rate(fighter.module_accessor, hammer_eff, 0.8);
+        //}
+        else{
+            VarModule::dec_int(fighter.battle_object, vars::dedede::instance::JET_TIMER);
+        }
+    }
+
+}
+
 unsafe fn bair_foot_rotation_scaling(boma: &mut BattleObjectModuleAccessor) {
     // Rotation keyframes
     let start_frame = 0.0;
@@ -260,6 +280,7 @@ pub unsafe fn moveset(fighter: &mut L2CFighterCommon, boma: &mut BattleObjectMod
     angled_inhale_shot(fighter);
     super_jump_fail_edge_cancel(fighter);
     fastfall_specials(fighter);
+    stored_jet_helper(fighter);
 }
 #[utils::macros::opff(FIGHTER_KIND_DEDEDE )]
 pub fn dedede_frame_wrapper(fighter: &mut smash::lua2cpp::L2CFighterCommon) {
