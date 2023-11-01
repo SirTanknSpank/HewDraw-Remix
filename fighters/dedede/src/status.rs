@@ -15,6 +15,7 @@ unsafe fn special_lw_jump_squat_exec(fighter: &mut L2CFighterCommon) -> L2CValue
 #[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
+        WorkModule::on_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
         StatusModule::change_status_force(fighter.boma(), *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, true);
         return original!(fighter);
     }
@@ -26,22 +27,20 @@ unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
 unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
         ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_heavyattack"), false);
-        MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_max_spin"), 0.0, 1.0, false, 0.0, false, false);
-        
         EffectModule::kill_joint_id(fighter.module_accessor, Hash40::new("hammer2"), false, false);
         VarModule::off_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG);
 
-        //0.into()
     }
-    if MotionModule::motion_kind(fighter.boma()) ==smash::hash40("special_lw_max_spin"){
-        if MotionModule::frame(fighter.boma()) > 104.0
-        && fighter.is_situation(*SITUATION_KIND_AIR){
-            StatusModule::change_status_force(fighter.boma(), *FIGHTER_STATUS_KIND_FALL_SPECIAL, true);
-        }
+    if MotionModule::motion_kind(fighter.boma()) ==smash::hash40("special_lw_max"){
+        //if MotionModule::frame(fighter.boma()) > 104.0
+        //&& fighter.is_situation(*SITUATION_KIND_AIR){
+            //StatusModule::change_status_force(fighter.boma(), *FIGHTER_STATUS_KIND_FALL_SPECIAL, true);
+        //}
         if AttackModule::is_infliction_status(fighter.boma(), *COLLISION_KIND_MASK_HIT){
             fighter.check_jump_cancel(false, false);
         }
     }
+    
     return original!(fighter);
 
 }

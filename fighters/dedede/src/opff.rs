@@ -144,9 +144,6 @@ unsafe fn stored_jet_helper(fighter: &mut L2CFighterCommon){
             DamageModule::add_damage(fighter.boma(), 3.0, 0);
             VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 60);
         }
-        //if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_STORED_EFFECT_FLAG){
-            //EffectModule::set_rate(fighter.module_accessor, hammer_eff, 0.8);
-        //}
         else{
             VarModule::dec_int(fighter.battle_object, vars::dedede::instance::JET_TIMER);
         }

@@ -31,16 +31,35 @@ unsafe extern "C" fn special_lw_cancel_pre(fighter: &mut L2CFighterCommon) -> L2
 }
 
 unsafe extern "C" fn special_lw_cancel_main(fighter: &mut L2CFighterCommon) -> L2CValue {
-    MotionModule::change_motion(
-        fighter.module_accessor,
-        Hash40::new("special_lw_cancel"),
-        0.0,
-        1.0,
-        false,
-        0.0,
-        false,
-        false
-    );
+    if fighter.is_situation(*SITUATION_KIND_AIR){
+        MotionModule::change_motion(
+            fighter.module_accessor,
+            Hash40::new("special_air_lw_cancel"),
+            0.0,
+            1.0,
+            false,
+            0.0,
+            false,
+            false
+        );
+
+        GroundModule::set_correct(fighter.module_accessor, GroundCorrectKind(*GROUND_CORRECT_KIND_AIR));
+    }
+    else{
+        MotionModule::change_motion(
+            fighter.module_accessor,
+            Hash40::new("special_lw_cancel"),
+            0.0,
+            1.0,
+            false,
+            0.0,
+            false,
+            false
+        );    
+
+        GroundModule::set_correct(fighter.module_accessor, GroundCorrectKind(*GROUND_CORRECT_KIND_GROUND));
+
+    }
 
     VarModule::on_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG);
     VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 90);
@@ -54,7 +73,12 @@ unsafe extern "C" fn special_lw_cancel_main(fighter: &mut L2CFighterCommon) -> L
 
 unsafe extern "C" fn special_lw_cancel_main_loop(fighter: &mut L2CFighterCommon) -> L2CValue {
     if MotionModule::is_end(fighter.module_accessor){
-        fighter.change_status(FIGHTER_STATUS_KIND_WAIT.into(), false.into());
+        if StatusModule::situation_kind(fighter.module_accessor) == *SITUATION_KIND_AIR {
+            fighter.change_status(FIGHTER_STATUS_KIND_FALL.into(),false.into());
+        }
+        else{
+            fighter.change_status(FIGHTER_STATUS_KIND_WAIT.into(), false.into());
+        }
     }
     0.into()
 }
