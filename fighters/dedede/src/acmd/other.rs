@@ -422,6 +422,16 @@ unsafe fn landing_fall_special_sound(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede_jethammer", scripts = ["effect_speciallwattackmax", "effect_speciallwairattackmax"] , category = ACMD_EFFECT, low_priority )]
+unsafe fn jethammer_special_lw_attack_max_effect(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack"), Hash40::new("jet9"), 0, 0, 0, 0, 0, 0, 1, true);
+    }
+
+}
+
 pub fn install() {
     install_acmd_scripts!(
         escape_air_game,
@@ -447,6 +457,7 @@ pub fn install() {
         damageflytop_sound,
         fly_game,
         landing_fall_special_sound,
+        jethammer_special_lw_attack_max_effect,
     );
 }
 

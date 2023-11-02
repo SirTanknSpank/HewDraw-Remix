@@ -105,7 +105,7 @@ special_air_lw_max:
   flags:
     move: false
   extra: 
-    cancel_frame: 105
+    cancel_frame: 123
 special_lw_cancel:
   game_script: game_speciallwcancel
   flags:
@@ -136,7 +136,7 @@ special_lw_cancel:
     cancel_frame: 18
     freeze_during_hitstop: false
 special_air_lw_cancel:
-  game_script: game_speciallwcancel
+  game_script: game_specialairlwcancel
   flags:
     turn: true
     loop: false
@@ -156,9 +156,9 @@ special_air_lw_cancel:
   animations:
   - name: d03specialairlwcancel.nuanmb
   scripts:
-  - expression_speciallwcancel
-  - sound_speciallwcancel
-  - effect_speciallwcancel
+  - expression_specialairlwcancel
+  - sound_specialairlwcancel
+  - effect_specialairlwcancel
   extra:
     intangible_start_frame: 0
     intangible_end_frame: 0
