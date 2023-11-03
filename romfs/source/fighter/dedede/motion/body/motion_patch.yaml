@@ -35,9 +35,9 @@ attack_s4_s:
     cancel_frame: 80
 attack_s3_s:
   flags:
-    move: true
+    move: false
   extra:
-    cancel_frame: 51
+    cancel_frame: 43
 fall_special:
   blend_frames: 5
 attack_air_f:
@@ -96,6 +96,12 @@ special_air_s_start:
 catch_attack:
   extra:
     cancel_frame: 0
+special_lw:
+  flags:
+    move: false
+special_air_lw:
+  flags:
+    move: false
 special_lw_max:
   flags:
     move: false

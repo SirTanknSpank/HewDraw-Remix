@@ -353,7 +353,12 @@ unsafe fn dedede_special_air_lw_start_game(fighter: &mut L2CAgentBase) {
 unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
-    let rush_speed = 1.0 + 0.005*WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
+    let rush_speed = 1.0 + 0.008*WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
+
+    if is_excute(fighter){
+        let x_speed = VarModule::get_float(fighter.battle_object, vars::dedede::instance::PRE_JETHAMMER_SPEED_X);
+        KineticModule::add_speed(fighter.module_accessor, &Vector3f{x: x_speed/2.0, y: 0.0, z:0.0});
+    }
     frame(lua_state, 1.0);
     if is_excute(fighter) {
         FT_MOTION_RATE(fighter, 7.0/(10.0-1.0));
@@ -362,10 +367,10 @@ unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     if is_excute(fighter) {
         KineticModule::add_speed(boma, &Vector3f::new(rush_speed, 0.0, 0.0));
         FT_MOTION_RATE(fighter, 1.0);
-        ATTACK(fighter, 0, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 9.0, 16.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 1, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 6.0, 10.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 2, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 6.0, 5.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 3, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 6.0, 0.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 0, 0, Hash40::new("hammer2"), 11.0, 45, 50, 0, 80, 8.0, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 1, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 4.0, 10.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 2, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 4.0, 5.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 3, 0, Hash40::new("hammer1"), 11.0, 45, 50, 0, 80, 4.0, 0.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
     }
     frame(lua_state, 13.0);
     if is_excute(fighter) {
@@ -373,7 +378,7 @@ unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     }
     frame(lua_state, 15.0);
     if is_excute(fighter) {
-        FT_MOTION_RATE(fighter, 25.0/(60.0-15.0));
+        FT_MOTION_RATE(fighter, 30.0/(60.0-15.0));
     }
     frame(lua_state, 60.0);
     if is_excute(fighter) {
@@ -395,14 +400,12 @@ unsafe fn dedede_special_lw_max_game(fighter: &mut L2CAgentBase) {
             ArticleModule::generate_article(boma,  *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, 0);
         }
         FT_MOTION_RATE(fighter, 12.0 / (23.0 - 1.0));
-        //ArticleModule::change_motion(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("hold_max"), false, -1.0);
-        //MotionModule::set_rate(article_boma, 0.5);
     }
     frame(lua_state, 23.0);
     if is_excute(fighter){
         FT_MOTION_RATE(fighter, 1.0);
         let stick_lr = ControlModule::get_stick_x(boma) * PostureModule::lr(boma);
-        KineticModule::add_speed(boma, &Vector3f{x: (3.0 + (0.5 * stick_lr)), y: 0.0, z:0.0});
+        KineticModule::add_speed(boma, &Vector3f{x: (3.0 + (0.25 * stick_lr)), y: 0.0, z:0.0});
         ATTACK(fighter, 0, 0, Hash40::new("hammer1"), 15.0, 70, 70, 0, 65, 9.0, 16.0, 0.0, 2.0, None, None, None, 1.6, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_fire"), *ATTACK_SOUND_LEVEL_LL, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
         ATTACK(fighter, 1, 0, Hash40::new("hammer1"), 15.0, 70, 70, 0, 65, 2.5, 1.0, 0.0, 0.0, Some(8.0), Some(0.0), Some(0.0), 1.6, 1.0, *ATTACK_SETOFF_KIND_THRU, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_fire"), *ATTACK_SOUND_LEVEL_LL, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
 
@@ -499,19 +502,19 @@ unsafe fn dedede_special_lw_cancel_game(fighter: &mut L2CAgentBase) {
 unsafe fn dedede_special_air_lw_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
-    let rush_speed = 0.6 + 0.01*WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
+    let rush_speed = 0.2 + 0.0075*WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
     frame(lua_state, 1.0);
     if is_excute(fighter) {
         FT_MOTION_RATE(fighter, 7.0/(10.0-1.0));
     }
     frame(lua_state, 10.0);
     if is_excute(fighter) {
-        KineticModule::add_speed(boma, &Vector3f::new(rush_speed, 0.5, 0.0));
+        KineticModule::add_speed(boma, &Vector3f::new(rush_speed, 0.25, 0.0));
         FT_MOTION_RATE(fighter, 1.0);
-        ATTACK(fighter, 0, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 9.0, 16.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 1, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 6.0, 10.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 2, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 6.0, 5.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 3, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 6.0, 0.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 0, 0, Hash40::new("hammer2"), 11.0, 40, 80, 0, 40, 8.0, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 1, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 4.0, 10.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 2, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 4.0, 5.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 3, 0, Hash40::new("hammer1"), 11.0, 40, 80, 0, 40, 4.0, 0.0, 0.0, 2.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
     }
     frame(lua_state, 13.0);
     if is_excute(fighter) {
@@ -548,7 +551,7 @@ unsafe fn dedede_special_air_lw_max_game(fighter: &mut L2CAgentBase) {
     if is_excute(fighter){
         FT_MOTION_RATE(fighter, 1.0);
         let stick_lr = ControlModule::get_stick_x(boma) * PostureModule::lr(boma);
-        KineticModule::add_speed(boma, &Vector3f{x: (1.25 + (0.25 * stick_lr)), y: 0.0, z:0.0});
+        KineticModule::add_speed(boma, &Vector3f{x: (1.25 + (0.2 * stick_lr)), y: 0.0, z:0.0});
         ATTACK(fighter, 0, 0, Hash40::new("hammer1"), 15.0, 70, 70, 0, 65, 9.0, 16.0, 0.0, 2.0, None, None, None, 1.6, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_fire"), *ATTACK_SOUND_LEVEL_LL, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
         ATTACK(fighter, 1, 0, Hash40::new("hammer1"), 15.0, 70, 70, 0, 65, 2.5, 1.0, 0.0, 0.0, Some(8.0), Some(0.0), Some(0.0), 1.6, 1.0, *ATTACK_SETOFF_KIND_THRU, *ATTACK_LR_CHECK_F, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_fire"), *ATTACK_SOUND_LEVEL_LL, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
 
@@ -742,12 +745,10 @@ pub fn install() {
         dedede_special_s_start_effect,
         dedede_special_s_start_sound,
         dedede_special_s_start_expression,
-
         dedede_special_air_s_start_effect,
         dedede_special_air_s_start_game,
         dedede_special_air_s_start_sound,
         dedede_special_air_s_start_expression,
-
         dedede_special_s_miss_game,
         dedede_special_air_s_miss_game,
         dedede_special_s_get_game,
@@ -757,18 +758,16 @@ pub fn install() {
 
         dedede_special_lw_start_game,
         dedede_special_air_lw_start_game,
-
         dedede_special_lw_game,
         dedede_special_lw_max_game,
         dedede_special_lw_max_sound,
         dedede_special_lw_max_effect,
- 
         dedede_special_air_lw_game,
         dedede_special_air_lw_max_game,
         dedede_special_air_lw_max_sound,
         dedede_special_air_lw_max_effect,
-
         dedede_special_lw_jump_squat_game,
+
         dedede_special_hi_jump_game,
         dedede_special_hi_landing_game,
         dedede_special_hi_turn_game,

@@ -392,6 +392,7 @@ pub mod vars {
 
             //floats
             pub const INHALE_STICK_Y: i32 = 0x0105;
+            pub const PRE_JETHAMMER_SPEED_X: i32 = 0x0108;
         }
     }
     pub mod demon {
