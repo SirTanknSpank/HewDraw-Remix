@@ -151,6 +151,17 @@ unsafe fn stored_jet_helper(fighter: &mut L2CFighterCommon){
 
 }
 
+unsafe fn jethammer_training_fixes(fighter: &mut L2CFighterCommon){
+    if is_training_mode(){
+        if fighter.status() == *FIGHTER_STATUS_KIND_APPEAL
+        && fighter.is_button_on(Buttons::Guard)
+        && !VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
+            VarModule::on_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG);
+            EffectModule::req_follow(fighter.boma(), Hash40::new("sys_steam3"), Hash40::new("hammer2"), &Vector3f::zero(), &Vector3f::zero(), 1.0, false, 0, 0, 0, 0, 0, false, false);
+        }
+    }
+}
+
 unsafe fn bair_foot_rotation_scaling(boma: &mut BattleObjectModuleAccessor) {
     // Rotation keyframes
     let start_frame = 0.0;
@@ -278,6 +289,7 @@ pub unsafe fn moveset(fighter: &mut L2CFighterCommon, boma: &mut BattleObjectMod
     super_jump_fail_edge_cancel(fighter);
     fastfall_specials(fighter);
     stored_jet_helper(fighter);
+    jethammer_training_fixes(fighter);
 }
 #[utils::macros::opff(FIGHTER_KIND_DEDEDE )]
 pub fn dedede_frame_wrapper(fighter: &mut smash::lua2cpp::L2CFighterCommon) {

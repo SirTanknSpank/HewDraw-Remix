@@ -3,6 +3,34 @@ use globals::*;
 
 mod special_lw_cancel;
 
+unsafe extern "C" fn change_status_callback(fighter: &mut L2CFighterCommon) -> L2CValue {
+    if fighter.is_status_one_of(&[
+        *FIGHTER_STATUS_KIND_ENTRY,
+        *FIGHTER_STATUS_KIND_DEAD,
+        *FIGHTER_STATUS_KIND_REBIRTH,
+        *FIGHTER_STATUS_KIND_WIN,
+        *FIGHTER_STATUS_KIND_LOSE
+    ]) || !sv_information::is_ready_go() {
+        VarModule::off_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG);
+        EffectModule::kill_joint_id(fighter.module_accessor, Hash40::new("hammer2"), false, false);
+        ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_heavyattack"), false);
+        ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_halfblink4"), false);
+    }
+    true.into()
+}
+#[smashline::fighter_init]
+fn dedede_init(fighter: &mut L2CFighterCommon){
+    unsafe{
+        if fighter.global_table[globals::FIGHTER_KIND] != FIGHTER_KIND_DEDEDE{
+            return;
+        }
+    
+        fighter.global_table[globals::STATUS_CHANGE_CALLBACK].assign(&L2CValue::Ptr(change_status_callback as *const () as _)); 
+
+        VarModule::set_int(fighter.battle_object, vars::dedede::instance::RECATCH_COUNTER, 0);
+    }
+}
+
 /* SPECIAL LW */
 
 // Prevent going into air jet hammer when Special is released during Jumpsquat
@@ -94,6 +122,9 @@ unsafe fn special_lw_attack_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
         0
     );
 
+    let start_situation = fighter.global_table[SITUATION_KIND].get_i32();
+    VarModule::set_int(fighter.battle_object, vars::dedede::instance::SPECIAL_LW_START_SITUATION, start_situation);
+
     return 0.into();
 
 }
@@ -107,8 +138,13 @@ unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
 
     }
     if MotionModule::motion_kind(fighter.boma()) ==smash::hash40("special_lw_max"){
-        if AttackModule::is_infliction_status(fighter.boma(), *COLLISION_KIND_MASK_HIT){
+        if AttackModule::is_infliction_status(fighter.boma(), *COLLISION_KIND_MASK_HIT)
+        && !fighter.is_in_hitlag()
+        && fighter.global_table[SITUATION_KIND].get_i32() == VarModule::get_int(fighter.battle_object, vars::dedede::instance::SPECIAL_LW_START_SITUATION){
             fighter.check_jump_cancel(false, false);
+        }
+        if AttackModule::is_infliction_status(fighter.module_accessor, *COLLISION_KIND_MASK_SHIELD){
+            KineticModule::clear_speed_all(fighter.module_accessor);
         }
     }
     
@@ -183,6 +219,7 @@ unsafe fn dedede_gordo_dead_end(weapon: &mut L2CWeaponCommon) -> L2CValue{
 }
 
 pub fn install(){
+    smashline::install_agent_init_callbacks!(dedede_init);
     smashline::install_status_scripts!(
         special_lw_jump_squat_exec,
         special_lw_attack_pre,

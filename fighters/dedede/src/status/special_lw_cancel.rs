@@ -75,6 +75,11 @@ unsafe extern "C" fn special_lw_cancel_main_loop(fighter: &mut L2CFighterCommon)
 
     if StatusModule::is_situation_changed(fighter.module_accessor){
         fighter.sub_change_motion_by_situation(Hash40::new("special_lw_cancel").into(), Hash40::new("special_air_lw_cancel").into(), true.into());
+
+        if fighter.is_situation(*SITUATION_KIND_AIR){
+            GroundModule::set_correct(fighter.module_accessor, GroundCorrectKind(*GROUND_CORRECT_KIND_AIR));
+            KineticModule::change_kinetic(fighter.module_accessor, *FIGHTER_KINETIC_TYPE_FALL);
+        }
     }
 
     if MotionModule::is_end(fighter.module_accessor){
