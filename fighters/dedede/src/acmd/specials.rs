@@ -333,7 +333,7 @@ unsafe fn dedede_special_lw_start_game(fighter: &mut L2CAgentBase) {
     let boma = fighter.boma();
 
     if is_excute(fighter){
-        FT_MOTION_RATE(fighter, 6.0/(18.0-1.0));
+        FT_MOTION_RATE(fighter, 8.0/(18.0-1.0));
         ArticleModule::generate_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, -1);
     }
 }
@@ -344,7 +344,7 @@ unsafe fn dedede_special_air_lw_start_game(fighter: &mut L2CAgentBase) {
     let boma = fighter.boma();
 
     if is_excute(fighter){
-        FT_MOTION_RATE(fighter, 12.0/(18.0-1.0));
+        FT_MOTION_RATE(fighter, 8.0/(18.0-1.0));
         ArticleModule::generate_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, -1);
     }
 }
@@ -386,6 +386,30 @@ unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", script = "expression_speciallw", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_lw_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        VisibilityModule::set_int64(boma, hash40("hammer") as i64, hash40("hammer_disp_off") as i64);
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_erase"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 9.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 10.0);
+    if is_excute(fighter) {
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attackl"), 0);
+    }
+    frame(lua_state, 48.0);
+    if is_excute(fighter) {
+        VisibilityModule::set_int64(boma, hash40("hammer") as i64, hash40("hammer_normal") as i64);
+    }
+}
+
 #[acmd_script( agent = "dedede", script = "game_speciallwmax" , category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_lw_max_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
@@ -396,9 +420,6 @@ unsafe fn dedede_special_lw_max_game(fighter: &mut L2CAgentBase) {
     let article_boma = sv_battle_object::module_accessor(object_id);
 
     if is_excute(fighter){
-        if !ArticleModule::is_exist(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER){
-            ArticleModule::generate_article(boma,  *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, 0);
-        }
         FT_MOTION_RATE(fighter, 12.0 / (23.0 - 1.0));
     }
     frame(lua_state, 23.0);
@@ -424,9 +445,6 @@ unsafe fn dedede_special_lw_max_game(fighter: &mut L2CAgentBase) {
     if is_excute(fighter){
         AttackModule::clear_all(boma);
     }
-    frame(lua_state, 67.0);
-    if is_excute(fighter){
-    }
     frame(lua_state, 71.0);
     if is_excute(fighter){
         ArticleModule::change_motion(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("start"), false, -1.0);
@@ -434,11 +452,7 @@ unsafe fn dedede_special_lw_max_game(fighter: &mut L2CAgentBase) {
         MotionModule::set_rate(article_boma, -1.0);
         KineticModule::clear_speed_all(boma);
     }
-    frame(lua_state, 84.0);
-    if is_excute(fighter){
-        ArticleModule::remove(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, app::ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
-        ModelModule::set_mesh_visibility(boma, Hash40::new("dedede_hammer"), true);
-    }
+
 }
 
 #[acmd_script( agent = "dedede", script = "sound_speciallwmax" , category = ACMD_SOUND , low_priority)]
@@ -483,6 +497,46 @@ unsafe fn dedede_special_lw_max_effect(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", script = "expression_speciallwmax", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_lw_max_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        VisibilityModule::set_int64(boma, hash40("hammer") as i64, hash40("hammer_disp_off") as i64);
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_erase"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 23.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_NONE, 3);
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attack_critical"), 0);
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 33.0);
+    if is_excute(fighter){
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 40.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_TOP, 6);
+    }
+    frame(lua_state, 43.0);
+    if is_excute(fighter){
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 72.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_LR, 10);
+    }
+    frame(lua_state, 84.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_down"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+        ArticleModule::remove(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, app::ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
+        ModelModule::set_mesh_visibility(boma, Hash40::new("dedede_hammer"), true);
+    }
+}
+
 #[acmd_script( agent = "dedede", scripts = ["game_speciallwcancel", "game_specialairlwcancel"] , category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_lw_cancel_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
@@ -522,11 +576,35 @@ unsafe fn dedede_special_air_lw_game(fighter: &mut L2CAgentBase) {
     }
     frame(lua_state, 15.0);
     if is_excute(fighter) {
-        FT_MOTION_RATE(fighter, 43.0/(60.0-15.0));
+        FT_MOTION_RATE(fighter, 36.0/(60.0-15.0));
     }
     frame(lua_state, 60.0);
     if is_excute(fighter) {
         FT_MOTION_RATE(fighter, 1.0);
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "expression_specialairlw", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_air_lw_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        VisibilityModule::set_int64(boma, hash40("hammer") as i64, hash40("hammer_disp_off") as i64);
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_erase"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 9.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 10.0);
+    if is_excute(fighter) {
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attackl"), 0);
+    }
+    frame(lua_state, 48.0);
+    if is_excute(fighter) {
+        VisibilityModule::set_int64(boma, hash40("hammer") as i64, hash40("hammer_normal") as i64);
     }
 }
 
@@ -540,12 +618,7 @@ unsafe fn dedede_special_air_lw_max_game(fighter: &mut L2CAgentBase) {
     let article_boma = sv_battle_object::module_accessor(object_id);
 
     if is_excute(fighter){
-        if !ArticleModule::is_exist(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER){
-            ArticleModule::generate_article(boma,  *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, 0);
-        }
         FT_MOTION_RATE(fighter, 12.0 / (23.0 - 1.0));
-        ArticleModule::change_motion(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("hold_max"), false, -1.0);
-        MotionModule::set_rate(article_boma, 0.5);
     }
     frame(lua_state, 23.0);
     if is_excute(fighter){
@@ -625,6 +698,46 @@ unsafe fn dedede_special_air_lw_max_effect(fighter: &mut L2CAgentBase) {
     frame(lua_state, 71.0);
     if is_excute(fighter){
         EFFECT_OFF_KIND(fighter, Hash40::new("dedede_final_jet"), false, true);
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "expression_specialairlwmax", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_air_lw_max_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        VisibilityModule::set_int64(boma, hash40("hammer") as i64, hash40("hammer_disp_off") as i64);
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_erase"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 23.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_NONE, 3);
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attack_critical"), 0);
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 33.0);
+    if is_excute(fighter){
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 40.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_TOP, 6);
+    }
+    frame(lua_state, 43.0);
+    if is_excute(fighter){
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 72.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_LR, 10);
+    }
+    frame(lua_state, 84.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_down"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+        ArticleModule::remove(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, app::ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
+        ModelModule::set_mesh_visibility(boma, Hash40::new("dedede_hammer"), true);
     }
 }
 
@@ -759,13 +872,17 @@ pub fn install() {
         dedede_special_lw_start_game,
         dedede_special_air_lw_start_game,
         dedede_special_lw_game,
+        dedede_special_lw_expression,
         dedede_special_lw_max_game,
         dedede_special_lw_max_sound,
         dedede_special_lw_max_effect,
+        dedede_special_lw_max_expression,
         dedede_special_air_lw_game,
+        dedede_special_air_lw_expression,
         dedede_special_air_lw_max_game,
         dedede_special_air_lw_max_sound,
         dedede_special_air_lw_max_effect,
+        dedede_special_air_lw_max_expression,
         dedede_special_lw_jump_squat_game,
 
         dedede_special_hi_jump_game,
