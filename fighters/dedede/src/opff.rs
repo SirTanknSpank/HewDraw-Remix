@@ -138,11 +138,11 @@ unsafe fn stored_jet_helper(fighter: &mut L2CFighterCommon){
     if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
         ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_heavyattack"), true);
         ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_halfblink4"), true);
-        let hammer_eff = EffectModule::req_follow(fighter.boma(), Hash40::new("sys_magicball_aura"), Hash40::new("hammer2"), &Vector3f{x: 0.0, y: 0.0, z: 0.0}, &Vector3f{x: 0.0, y: 0.0, z: 0.0}, 1.75, false, 0, 0, 0, 0, 0, false, false) as u32;
+        let hammer_eff = EffectModule::req_follow(fighter.boma(), Hash40::new("sys_magicball_aura"), Hash40::new("hammer2"), &Vector3f{x: 0.0, y: 0.0, z: 0.0}, &Vector3f{x: 0.0, y: 0.0, z: -1.0}, 2.2, false, 0, 0, 0, 0, 0, false, false) as u32;
 
         if VarModule::get_int(fighter.battle_object, vars::dedede::instance::JET_TIMER) == 0{
-            DamageModule::add_damage(fighter.boma(), 3.0, 0);
-            VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 60);
+            DamageModule::add_damage(fighter.boma(), 0.6, 0);
+            VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 20);
         }
         else{
             VarModule::dec_int(fighter.battle_object, vars::dedede::instance::JET_TIMER);

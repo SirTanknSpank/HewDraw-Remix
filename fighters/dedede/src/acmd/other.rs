@@ -426,10 +426,33 @@ unsafe fn landing_fall_special_sound(fighter: &mut L2CAgentBase) {
 unsafe fn jethammer_special_lw_attack_max_effect(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
+
+    /* I realize motion rating here isn't the play but jethammer doesn't keep D3's motion rate lol */
+    if is_excute(fighter){
+        FT_MOTION_RATE(fighter, 12.0 / (23.0 - 1.0));
+    }
+    frame(lua_state, 23.0);
+    if is_excute(fighter) {
+        FT_MOTION_RATE(fighter, 1.0);
+        EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack1"), Hash40::new("jet9"), 0, 0, 0, 0, 0, 0, 1, true);
+        EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack2"), Hash40::new("hammer"), 0, 0, 0, 0, 0, 0, 1, true);
+
+    }
+
+}
+
+#[acmd_script( agent = "dedede_jethammer", scripts = ["effect_speciallwattack", "effect_speciallwairattack"], category = ACMD_EFFECT, low_priority )]
+unsafe fn jethammer_special_lw_attack_effect(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 0.0);
     if is_excute(fighter) {
         EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack"), Hash40::new("jet9"), 0, 0, 0, 0, 0, 0, 1, true);
     }
-
+    frame(lua_state, 9.0);
+    if is_excute(fighter) {
+        EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack2"), Hash40::new("hammer"), 0, 0, 0, 0, 0, 0, 1, true);
+    }
 }
 
 pub fn install() {
@@ -458,6 +481,7 @@ pub fn install() {
         fly_game,
         landing_fall_special_sound,
         jethammer_special_lw_attack_max_effect,
+        jethammer_special_lw_attack_effect,
     );
 }
 

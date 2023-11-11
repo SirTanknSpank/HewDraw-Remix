@@ -62,7 +62,7 @@ unsafe extern "C" fn special_lw_cancel_main(fighter: &mut L2CFighterCommon) -> L
     }
 
     VarModule::on_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG);
-    VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 90);
+    VarModule::set_int(fighter.battle_object, vars::dedede::instance::JET_TIMER, 20);
 
     EffectModule::req_follow(fighter.boma(), Hash40::new("sys_steam3"), Hash40::new("hammer2"), &Vector3f{x: 0.0, y: 0.0, z: 0.0}, &Vector3f{x: 0.0, y: 0.0, z: 0.0}, 1.0, false, 0, 0, 0, 0, 0, false, false);
 

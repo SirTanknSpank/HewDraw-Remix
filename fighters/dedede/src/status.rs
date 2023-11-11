@@ -42,17 +42,6 @@ unsafe fn special_lw_jump_squat_exec(fighter: &mut L2CFighterCommon) -> L2CValue
     return 0.into();
 }
 
-#[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
-unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
-    if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
-        WorkModule::on_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
-        StatusModule::change_status_force(fighter.boma(), *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, true);
-        return original!(fighter);
-    }
-    return original!(fighter);
-
-}
-
 #[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
 unsafe fn special_lw_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
 
@@ -93,6 +82,24 @@ unsafe fn special_lw_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
         return original!(fighter);
     }
 }
+
+#[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
+unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
+    if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_HAMMER_MAX_CHARGE_FLAG){
+        let article = ArticleModule::get_article(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER);
+        let object_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
+        let article_boma = sv_battle_object::module_accessor(object_id);
+
+        WorkModule::on_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
+        WorkModule::on_flag(article_boma, *WEAPON_DEDEDE_JETHAMMER_STATUS_WORK_FLAG_HOLD_MAX);
+        StatusModule::change_status_force(fighter.boma(), *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, true);
+        
+        return original!(fighter);
+    }
+    return original!(fighter);
+
+}
+
 
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
 unsafe fn special_lw_attack_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
