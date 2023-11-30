@@ -71,8 +71,9 @@
   </list>
   <list hash="param_special_lw">
     <struct index="0">
-      <float hash="hold_walk_speed_x">0.5</float>
-      <float hash="hold_attack_mul">0.08</float>
+      <float hash="hold_walk_speed_x">0.55</float>
+      <float hash="hold_attack_mul">0.09</float>
+      <float hash="hold_max_f">80</float>
       <float hash="hold_max_damage">10</float>
       <float hash="hold_max_damage_max">999</float>
       <int hash="critical_1_on_1">1</int>
