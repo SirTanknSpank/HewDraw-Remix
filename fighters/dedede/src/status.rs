@@ -110,48 +110,6 @@ unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
 
 }
 
-#[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_WAIT, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
-unsafe fn special_lw_wait_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
-    if ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_GUARD) 
-    && WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX) {
-        let cancel_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_CANCEL);
-        fighter.change_status(cancel_status.into(), true.into());
-
-        return 0.into()
-    }
-    else{
-        return original!(fighter);
-    }
-}
-
-#[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_WALK, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
-unsafe fn special_lw_walk_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
-    if ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_GUARD) 
-    && WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX) {
-        let cancel_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_CANCEL);
-        fighter.change_status(cancel_status.into(), true.into());
-
-        return 0.into()
-    }
-    else{
-        return original!(fighter);
-    }
-}
-
-#[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_FALL, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
-unsafe fn special_lw_fall_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
-    if ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_GUARD) 
-    && WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX) {
-        let cancel_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_CANCEL);
-        fighter.change_status(cancel_status.into(), true.into());
-
-        return 0.into()
-    }
-    else{
-        return original!(fighter);
-    }
-}
-
 /* SPECIAL HI */
 
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_HI_FAILURE, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
@@ -183,9 +141,6 @@ pub fn install(){
         special_lw_attack_pre,
         special_lw_attack_exec,
         special_lw_pre,
-        special_lw_wait_exec,
-        special_lw_walk_exec,
-        special_lw_fall_exec,
         dedede_gordo_dead_end,
         dedede_special_hi_status_main,
     );
