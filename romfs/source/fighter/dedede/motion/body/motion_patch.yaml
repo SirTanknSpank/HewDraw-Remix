@@ -112,3 +112,6 @@ special_air_lw_max:
     move: false
   extra: 
     cancel_frame: 123
+furafura_end:
+  extra:
+    cancel_frame: 10
