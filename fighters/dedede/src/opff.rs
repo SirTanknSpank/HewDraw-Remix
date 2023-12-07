@@ -83,13 +83,16 @@ unsafe fn gordo_recatch(boma: &mut BattleObjectModuleAccessor, frame: f32, fight
                         StatusModule::change_status_force(boma, *FIGHTER_STATUS_KIND_SPECIAL_S, false);
                         
                         if StatusModule::situation_kind(boma) == *SITUATION_KIND_AIR {
-                            KineticModule::mul_speed(fighter.module_accessor, &Vector3f{x: 1.5, y: 0.0, z:1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
+                            KineticModule::mul_speed(fighter.module_accessor, &Vector3f{x: 1.75, y: 0.0, z:1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
                             MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_air_s_get"), 0.0, 1.0, false, 0.0, false, false);
-
+                            MotionModule::set_rate(fighter.module_accessor, 1.2);
+                            //1.25 FAF = 39
                         }
                         else{
+                            KineticModule::mul_speed(fighter.module_accessor, &Vector3f{x: 1.1, y: 0.0, z:1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
                             StatusModule::change_status_force(boma, *FIGHTER_STATUS_KIND_SPECIAL_S, false);
                             MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_s_get"), 0.0, 1.0, false, 0.0, false, false);
+                            MotionModule::set_rate(fighter.module_accessor, 1.2);
                         }
 
                         //Prevents turnarounds
