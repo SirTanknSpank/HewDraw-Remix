@@ -208,9 +208,9 @@ unsafe fn check_fighter_edge_slipoffs(boma: &mut BattleObjectModuleAccessor) -> 
 
     //KING DEDEDE
     if fighter_kind == *FIGHTER_KIND_DEDEDE 
-    && ([*FIGHTER_STATUS_KIND_SPECIAL_S, *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_HI_FAILURE].contains(&status_kind)
-    || status_kind == *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK && WorkModule::is_flag(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX)){
-        return true.into();
+    && [*FIGHTER_STATUS_KIND_SPECIAL_S, *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_HI_FAILURE
+        ].contains(&status_kind){
+            return true.into();
     }
     
     // FOX

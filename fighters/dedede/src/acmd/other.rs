@@ -219,10 +219,6 @@ unsafe fn dedede_gordo_special_s_throw_game(fighter: &mut L2CAgentBase) {
     let gordo_speed_x = KineticModule::get_sum_speed_x(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);    
     
     if is_excute(fighter){
-        if VarModule::is_flag(owner_module_accessor.object(), vars::dedede::instance::IS_DASH_GORDO){
-            PostureModule::reverse_rot_y_lr(boma);
-            PostureModule::reverse_lr(boma);
-        }
         /* Prevents backwards gordos */
         if PostureModule::lr(owner_module_accessor) * gordo_speed_x < 0.0{
             KineticModule::mul_speed(boma, &Vector3f{x: -1.0, y: 1.0,z:  1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
