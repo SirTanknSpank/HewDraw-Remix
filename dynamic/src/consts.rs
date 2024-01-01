@@ -680,7 +680,6 @@ pub mod vars {
             pub const DISABLE_SPECIAL_LW: i32 = 0x0102;
             pub const IS_POWERED_UP: i32 = 0x0103;
             pub const IS_USPECIAL_ATTACK_CANCEL: i32 = 0x0104;
-            pub const DISABLE_NSPECIAL_PARRY_FORGIVENESS: i32 = 0x0105;
 
             // ints
             pub const METER_PAUSE_REGEN_FRAME: i32 = 0x0100;
@@ -833,15 +832,25 @@ pub mod vars {
         pub mod instance {
             // flags
             pub const IS_CURRENT_ATTACK_LW3_SOUL_FIRE: i32 = 0x0100;
-            pub const TUMBLE_START: i32 = 0x0101;
-            pub const IS_IN_TUMBLE: i32 = 0x0102;
             pub const DISABLE_SPECIAL_S: i32 = 0x0103;
             pub const CAN_RESPAWN_TABLE: i32 = 0x0104;
+            pub const SHOULD_CYCLE_MATERIAL: i32 = 0x0105;
+            pub const SHOULD_RESET_ROT: i32 = 0x0106;
+
+            // ints 
+            pub const MATERIAL_INDEX: i32 = 0x0100;
+            pub const MATERIAL_EFFECT_HANDLER: i32 = 0x0101;
+            pub const HITSTUN_TIMER: i32 = 0x0102;
 
             //floats
             pub const FORGE_START_Y_POS: i32 = 0x0106;
+            pub const DAMAGE_TRACKER: i32 = 0x0107;
+            pub const TABLE_HP_TRACKER: i32 = 0x0108;
         }
         pub mod status {
+            // ints
+            pub const MINING_TIMER: i32 = 0x1100;
+            
             // floats
             pub const GLIDE_TIMER: i32 = 0x1100;
         }
@@ -849,7 +858,9 @@ pub mod vars {
 
     pub mod pikachu {
         pub mod instance {
+            // flags
             pub const DISABLE_QA_JC: i32 = 0x0100;
+            pub const QUICK_ATTACK_CANCEL: i32 = 0x0101;
         }
     }
 
@@ -957,14 +968,19 @@ pub mod vars {
 
     pub mod shizue {
         pub mod instance {
+            // flags
+            pub const LLOID_ASYNC: i32 = 0x0100;
+
             // floats
             pub const STORED_BALLOON_POWER: i32 = 0x0100;
+
+            // ints
+            pub const LLOID_TIMER: i32 = 0x0100;
         }
         pub mod status {
             // flags
             pub const IS_NOT_QUICK_RELEASE: i32 = 0x1100;
             pub const IS_DETACH_BOOST: i32 = 0x1101;
-            pub const IS_LLOID_READY: i32 = 0x1102;
         }
     }
 
@@ -1306,6 +1322,8 @@ pub mod vars {
             // flags
             pub const FLAME_ACTIVE: i32 = 0x1100;
             pub const CLOUD_COVER: i32 = 0x1101;
+            pub const BITE_START: i32 = 0x1102;
+            pub const BURST: i32 = 0x1103;
         }
     }
 
@@ -1371,6 +1389,14 @@ pub mod vars {
             pub const RING_SECOND_COLOR: i32 = 0x108;
         }
     }
+
+    pub mod jack {
+        pub mod instance {
+            // flags
+            pub const GROUNDED_DOYLE_DASH: i32 = 0x0100;
+        }    
+    }
+
 }
 
 pub mod statuses {
