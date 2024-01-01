@@ -1397,7 +1397,7 @@
       <float hash="landing_attack_air_frame_f">14</float>
       <float hash="landing_attack_air_frame_b">11</float>
       <float hash="landing_attack_air_frame_hi">12</float>
-      <float hash="landing_attack_air_frame_lw">15</float>
+      <float hash="landing_attack_air_frame_lw">11</float>
       <int hash="landing_heavy_frame">5</int>
       <float hash="scale">0.93</float>
       <int hash="jump_count_max">4</int>

@@ -85,14 +85,14 @@ unsafe fn gordo_recatch(boma: &mut BattleObjectModuleAccessor, frame: f32, fight
                         if StatusModule::situation_kind(boma) == *SITUATION_KIND_AIR {
                             KineticModule::mul_speed(fighter.module_accessor, &Vector3f{x: 1.75, y: 0.0, z:1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
                             MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_air_s_get"), 0.0, 1.0, false, 0.0, false, false);
-                            MotionModule::set_rate(fighter.module_accessor, 1.2);
-                            //1.25 FAF = 39
+                            MotionModule::set_rate(fighter.module_accessor, 1.15);
+                            //1.15 Rate FAF = 42
                         }
                         else{
                             KineticModule::mul_speed(fighter.module_accessor, &Vector3f{x: 1.1, y: 0.0, z:1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
                             StatusModule::change_status_force(boma, *FIGHTER_STATUS_KIND_SPECIAL_S, false);
                             MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_s_get"), 0.0, 1.0, false, 0.0, false, false);
-                            MotionModule::set_rate(fighter.module_accessor, 1.2);
+                            MotionModule::set_rate(fighter.module_accessor, 1.15);
                         }
 
                         //Prevents turnarounds
@@ -121,6 +121,9 @@ unsafe fn gordo_recatch(boma: &mut BattleObjectModuleAccessor, frame: f32, fight
         && VarModule::is_flag(fighter.battle_object, vars::dedede::instance::IS_DASH_GORDO){
             if fighter.status_frame() < 5{
                 ControlModule::reset_main_stick(boma);
+            }
+            if StatusModule::is_situation_changed(fighter.module_accessor){
+                MotionModule::set_rate(fighter.module_accessor, 1.4);
             }
         }
         VarModule::set_flag(fighter.battle_object, vars::dedede::instance::IS_REMOVED_FLAG, false);
@@ -210,6 +213,9 @@ unsafe fn bair_foot_rotation_scaling(boma: &mut BattleObjectModuleAccessor) {
 }
  
 unsafe fn fastfall_specials(fighter: &mut L2CFighterCommon) {
+    let special_lw_hiswing = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_HI_SWING);
+    let special_lw_lwswing = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_LW_SWING);
+
     if !fighter.is_in_hitlag()
     && !StatusModule::is_changing(fighter.module_accessor)
     && fighter.is_status_one_of(&[
@@ -233,7 +239,9 @@ unsafe fn fastfall_specials(fighter: &mut L2CFighterCommon) {
         *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_HI_TURN,
         *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP,
         *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_FALL,
-        *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_PASS
+        *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_PASS,
+        special_lw_hiswing,
+        special_lw_lwswing
         ]) 
     && fighter.is_situation(*SITUATION_KIND_AIR) {
         fighter.sub_air_check_dive();

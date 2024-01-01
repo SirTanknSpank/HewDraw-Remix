@@ -43,5 +43,11 @@ pub fn install(is_runtime: bool) {
     status::install();
     opff::install(is_runtime);
 
+    if !is_runtime || is_hdr_available() {
+        status::add_statuses();
+    }
 }
 
+pub fn delayed_install() {
+    status::add_statuses();
+}

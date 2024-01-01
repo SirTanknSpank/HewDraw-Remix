@@ -1,6 +1,9 @@
 use super::*;
 use globals::*;
 
+mod special_lw_hi_swing;
+mod special_lw_lw_swing;
+
 #[smashline::fighter_init]
 fn dedede_init(fighter: &mut L2CFighterCommon){
     unsafe{
@@ -26,13 +29,10 @@ unsafe fn special_lw_jump_squat_exec(fighter: &mut L2CFighterCommon) -> L2CValue
 
 #[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
 unsafe fn special_lw_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
-
     let x_speed = KineticModule::get_sum_speed_x(fighter.module_accessor, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
     VarModule::set_float(fighter.battle_object, vars::dedede::instance::PRE_JETHAMMER_SPEED_X, x_speed);
 
-
     return original!(fighter);
-
 }
 
 
@@ -71,45 +71,67 @@ unsafe fn special_lw_attack_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
 
 }
 
+#[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
+unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
+    if WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX){
+        let max_hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, max_hold);
+        WorkModule::off_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
+    }
+    else{
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, 0.0);
+    }
+
+    if ControlModule::get_stick_y(fighter. module_accessor) < -0.5 && fighter.is_situation(*SITUATION_KIND_AIR){
+        let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_LW_SWING);
+        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
+        fighter.change_status(swing_status.into(), true.into());
+
+        return 0.into();
+    }
+    else if ControlModule::get_stick_y(fighter. module_accessor) > 0.5 {
+        let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_HI_SWING);
+        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
+        fighter.change_status(swing_status.into(), true.into());
+
+        return 0.into();
+    }
+    else{
+        ArticleModule::change_motion(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("attack"), false, 0.0);
+        return original!(fighter);
+    }
+}
+
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
+    if WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX){
+        let max_hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
 
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, max_hold);
+        WorkModule::off_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
+        
+    }
+    else{
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, 0.0);
+    }
 
-    if MotionModule::motion_kind(fighter.boma()) ==smash::hash40("special_lw_max") || MotionModule::motion_kind(fighter.boma()) ==smash::hash40("special_air_lw_max"){
-        if AttackModule::is_infliction_status(fighter.module_accessor, *COLLISION_KIND_MASK_SHIELD){
-            KineticModule::clear_speed_all(fighter.module_accessor);
-        }
-        if StatusModule::is_situation_changed(fighter.module_accessor){
-            fighter.sub_change_motion_by_situation(Hash40::new("special_lw_max").into(), Hash40::new("special_air_lw_max").into(), true.into());  
-            if fighter.is_situation(*SITUATION_KIND_GROUND) {
-                KineticModule::change_kinetic(fighter.module_accessor, *FIGHTER_KINETIC_TYPE_GROUND_STOP);
-            }
-            else {
-                KineticModule::change_kinetic(fighter.module_accessor, *FIGHTER_KINETIC_TYPE_AIR_STOP);
-                GroundModule::set_correct(fighter.module_accessor, GroundCorrectKind(*GROUND_CORRECT_KIND_AIR));
-            }
-    
-        }
+    ArticleModule::set_flag(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, *WEAPON_DEDEDE_JETHAMMER_STATUS_WORK_FLAG_HOLD_MAX);
 
-        if MotionModule::frame(fighter.module_accessor) ==61.0{
-            AttackModule::clear_all(fighter.module_accessor);
-        }
-        if MotionModule::frame(fighter.module_accessor) ==71.0{
-            let article = ArticleModule::get_article(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER);
-            let object_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
-            let article_boma = sv_battle_object::module_accessor(object_id);
-
-            ArticleModule::change_motion(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("start"), false, -1.0);
-            MotionModule::set_frame(article_boma, 17.0, true);
-            MotionModule::set_rate(article_boma, -1.5);
-        }
-
-      }
-    
-    return 0.into();
+    return original!(fighter);
 
 }
 
+#[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_END)]
+unsafe fn special_lw_attack_end(fighter: &mut L2CFighterCommon) -> L2CValue{
+    VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, 0.0);
+
+    return 0.into();
+}
 /* SPECIAL HI */
 
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_HI_FAILURE, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
@@ -139,9 +161,15 @@ pub fn install(){
     smashline::install_status_scripts!(
         special_lw_jump_squat_exec,
         special_lw_attack_pre,
+        special_lw_attack_main,
         special_lw_attack_exec,
         special_lw_pre,
         dedede_gordo_dead_end,
         dedede_special_hi_status_main,
     );
+}
+
+pub fn add_statuses(){
+    special_lw_lw_swing::install();
+    special_lw_hi_swing::install();
 }

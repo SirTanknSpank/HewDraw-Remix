@@ -388,12 +388,12 @@ pub mod vars {
             pub const IS_REMOVED_FLAG: i32 = 0x0103;
 
             //ints
-            pub const RECATCH_COUNTER: i32 = 0x0105;
-            pub const SPECIAL_LW_START_SITUATION: i32 = 0x0107;
+            pub const RECATCH_COUNTER: i32 = 0x0104;
 
             //floats
-            pub const INHALE_STICK_Y: i32 = 0x0108;
-            pub const PRE_JETHAMMER_SPEED_X: i32 = 0x0109;
+            pub const INHALE_STICK_Y: i32 = 0x0105;
+            pub const PRE_JETHAMMER_SPEED_X: i32 = 0x0106;
+            pub const ADDED_JET_DAMAGE: i32 = 0x0107;
         }
     }
     pub mod demon {
@@ -1436,6 +1436,7 @@ pub mod statuses {
     }
 
     pub mod dedede{
-        pub const SPECIAL_LW_CANCEL: i32 = 0;
+        pub const SPEICIAL_LW_LW_SWING: i32 = 0;
+        pub const SPEICIAL_LW_HI_SWING: i32 = 1;
     }
 }
