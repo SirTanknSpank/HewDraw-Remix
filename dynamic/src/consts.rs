@@ -1470,7 +1470,7 @@ pub mod statuses {
     }
 
     pub mod dedede{
-        pub const SPEICIAL_LW_LW_SWING: i32 = 0;
-        pub const SPEICIAL_LW_HI_SWING: i32 = 1;
+        pub const SPECIAL_LW_DOWN_SWING: i32 = 0;
+        pub const SPECIAL_LW_HI_SWING: i32 = 1;
     }
 }

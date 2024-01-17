@@ -213,8 +213,8 @@ unsafe fn bair_foot_rotation_scaling(boma: &mut BattleObjectModuleAccessor) {
 }
  
 unsafe fn fastfall_specials(fighter: &mut L2CFighterCommon) {
-    let special_lw_hiswing = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_HI_SWING);
-    let special_lw_lwswing = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_LW_SWING);
+    let special_lw_hi_swing = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_HI_SWING);
+    let special_lw_down_swing = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_DOWN_SWING);
 
     if !fighter.is_in_hitlag()
     && !StatusModule::is_changing(fighter.module_accessor)
@@ -240,8 +240,8 @@ unsafe fn fastfall_specials(fighter: &mut L2CFighterCommon) {
         *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP,
         *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_FALL,
         *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_PASS,
-        special_lw_hiswing,
-        special_lw_lwswing
+        special_lw_hi_swing,
+        special_lw_down_swing
         ]) 
     && fighter.is_situation(*SITUATION_KIND_AIR) {
         fighter.sub_air_check_dive();

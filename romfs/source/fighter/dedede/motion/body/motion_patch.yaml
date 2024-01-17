@@ -142,8 +142,8 @@ special_lw_hi_swing:
   extra:
     xlu_start: 0
     xlu_end: 0
-special_lw_lw_swing:
-  game_script: game_speciallwlwswing
+special_lw_down_swing:
+  game_script: game_speciallwdownswing
   flags:
     turn: false
     loop: false
@@ -161,13 +161,13 @@ special_lw_lw_swing:
     unk_2000: false
   blend_frames: 0
   animations:
-  - name: d03speciallwlwswing.nuanmb
+  - name: d03speciallwdownswing.nuanmb
   scripts:
-  - expression_speciallwlwswing
-  - sound_speciallwlwswing
-  - effect_speciallwlwswing
-special_lw_lw_swing_landing:
-  game_script: game_speciallwlwswinglanding
+  - expression_speciallwdownswing
+  - sound_speciallwdownswing
+  - effect_speciallwdownswing
+special_lw_down_swing_landing:
+  game_script: game_speciallwdownswinglanding
   flags:
     turn: false
     loop: false
@@ -185,11 +185,11 @@ special_lw_lw_swing_landing:
     unk_2000: false
   blend_frames: 0
   animations:
-  - name: d03speciallwlwswinglanding.nuanmb
+  - name: d03speciallwdownswinglanding.nuanmb
   scripts:
-  - expression_speciallwlwswinglanding
-  - sound_speciallwlwswinglanding
-  - effect_speciallwlwswinglanding
+  - expression_speciallwdownswinglanding
+  - sound_speciallwdownswinglanding
+  - effect_speciallwdownswinglanding
 special_lw_hi_swing_landing:
   game_script: game_speciallwhiswinglanding
   flags:
@@ -209,7 +209,7 @@ special_lw_hi_swing_landing:
     unk_2000: false
   blend_frames: 0
   animations:
-  - name: d03speciallwlwswinglanding.nuanmb
+  - name: d03speciallwdownswinglanding.nuanmb
   scripts:
   - expression_speciallwhiswinglanding
   - sound_speciallwhiswinglanding

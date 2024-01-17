@@ -106,6 +106,8 @@ unsafe extern "C" fn special_lw_hi_swing_main_loop(fighter: &mut L2CFighterCommo
 
 unsafe extern "C" fn special_lw_hi_swing_end(fighter: &mut L2CFighterCommon) -> L2CValue{
     VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, 0.0);
+    ArticleModule::remove_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
+    ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_hammer"), true);
 
     0.into()
 }
@@ -113,7 +115,7 @@ unsafe extern "C" fn special_lw_hi_swing_end(fighter: &mut L2CFighterCommon) -> 
 pub fn install(){
     CustomStatusManager::add_new_agent_status_script(
         Hash40::new("fighter_kind_dedede"),
-        statuses::dedede::SPEICIAL_LW_HI_SWING,
+        statuses::dedede::SPECIAL_LW_HI_SWING,
         StatusInfo::new()
             .with_pre(special_lw_hi_swing_pre)
             .with_main(special_lw_hi_swing_main)

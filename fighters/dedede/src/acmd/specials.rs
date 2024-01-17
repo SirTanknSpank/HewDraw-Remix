@@ -529,8 +529,8 @@ unsafe fn dedede_special_air_lw_max_expression(fighter: &mut L2CAgentBase) {
    
 }
 
-#[acmd_script( agent = "dedede", script = "game_speciallwlwswing" , category = ACMD_GAME , low_priority)]
-unsafe fn dedede_special_lw_lw_swing_game(fighter: &mut L2CAgentBase){
+#[acmd_script( agent = "dedede", script = "game_speciallwdownswing" , category = ACMD_GAME , low_priority)]
+unsafe fn dedede_special_lw_down_swing_game(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
     let hold_damage = VarModule::get_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE);
@@ -563,8 +563,8 @@ unsafe fn dedede_special_lw_lw_swing_game(fighter: &mut L2CAgentBase){
     }
 }
 
-#[acmd_script( agent = "dedede", script = "sound_speciallwlwswing" , category = ACMD_SOUND , low_priority)]
-unsafe fn dedede_special_lw_lw_swing_sound(fighter: &mut L2CAgentBase){
+#[acmd_script( agent = "dedede", script = "sound_speciallwdownswing" , category = ACMD_SOUND , low_priority)]
+unsafe fn dedede_special_lw_down_swing_sound(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
 
@@ -579,8 +579,8 @@ unsafe fn dedede_special_lw_lw_swing_sound(fighter: &mut L2CAgentBase){
     }
 }
 
-#[acmd_script( agent = "dedede", script = "effect_speciallwlwswing" , category = ACMD_EFFECT , low_priority)]
-unsafe fn dedede_special_lw_lw_swing_effect(fighter: &mut L2CAgentBase){
+#[acmd_script( agent = "dedede", script = "effect_speciallwdownswing" , category = ACMD_EFFECT , low_priority)]
+unsafe fn dedede_special_lw_down_swing_effect(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
 
@@ -598,8 +598,8 @@ unsafe fn dedede_special_lw_lw_swing_effect(fighter: &mut L2CAgentBase){
     }
 }
 
-#[acmd_script( agent = "dedede", script = "game_speciallwlwswinglanding" , category = ACMD_GAME , low_priority)]
-unsafe fn dedede_special_lw_lw_swing_landing_game(fighter: &mut L2CAgentBase){
+#[acmd_script( agent = "dedede", script = "game_speciallwdownswinglanding" , category = ACMD_GAME , low_priority)]
+unsafe fn dedede_special_lw_down_swing_landing_game(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
 
@@ -611,8 +611,8 @@ unsafe fn dedede_special_lw_lw_swing_landing_game(fighter: &mut L2CAgentBase){
     }
 }
 
-#[acmd_script( agent = "dedede", script = "sound_speciallwlwswinglanding" , category = ACMD_SOUND , low_priority)]
-unsafe fn dedede_special_lw_lw_swing_landing_sound(fighter: &mut L2CAgentBase){
+#[acmd_script( agent = "dedede", script = "sound_speciallwdownswinglanding" , category = ACMD_SOUND , low_priority)]
+unsafe fn dedede_special_lw_down_swing_landing_sound(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
 
@@ -622,8 +622,8 @@ unsafe fn dedede_special_lw_lw_swing_landing_sound(fighter: &mut L2CAgentBase){
     }
 }
 
-#[acmd_script( agent = "dedede", script = "effect_speciallwlwswinglanding" , category = ACMD_EFFECT , low_priority)]
-unsafe fn dedede_special_lw_lw_swing_landing_effect(fighter: &mut L2CAgentBase){
+#[acmd_script( agent = "dedede", script = "effect_speciallwdownswinglanding" , category = ACMD_EFFECT , low_priority)]
+unsafe fn dedede_special_lw_down_swing_landing_effect(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
 
@@ -683,9 +683,9 @@ unsafe fn dedede_special_lw_hi_swing_game(fighter: &mut L2CAgentBase){
     }
     frame(lua_state, 16.0);
     if is_excute(fighter) {
-        ATTACK(fighter, 0, 0, Hash40::new("hammer2"), 12.0 + hold_damage, 80, 80 - (hold_damage as i32), 0, 40, 4.0, -12.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_ON, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_dedede_hammer"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 1, 0, Hash40::new("hammer2"), 13.0 + hold_damage, 80, 80 - (hold_damage as i32), 0, 40, 4.0, -6.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_ON, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_dedede_hammer"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
-        ATTACK(fighter, 2, 0, Hash40::new("hammer2"), 16.0 + hold_damage, 80, 80 - (hold_damage as i32), 0, 40, 7.0, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_ON, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_dedede_hammer"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 0, 0, Hash40::new("hammer2"), 11.0 + hold_damage, 70, 80, 0, 45, 4.0, -12.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_ON, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_dedede_hammer"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 1, 0, Hash40::new("hammer2"), 11.0 + hold_damage, 70, 80, 0, 45, 4.0, -6.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_ON, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_dedede_hammer"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
+        ATTACK(fighter, 2, 0, Hash40::new("hammer2"), 13.0 + hold_damage, 70, 80, 0, 45, 7.0, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_ON, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, true, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_dedede_hammer"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_DEDEDE, *ATTACK_REGION_HAMMER);
     }
     frame(lua_state, 23.0);
     if is_excute(fighter) {
@@ -865,12 +865,12 @@ pub fn install() {
         dedede_special_air_lw_max_sound,
         dedede_special_air_lw_max_effect,
         dedede_special_air_lw_max_expression,
-        dedede_special_lw_lw_swing_game,
-        dedede_special_lw_lw_swing_effect,
-        dedede_special_lw_lw_swing_sound,
-        dedede_special_lw_lw_swing_landing_game,
-        dedede_special_lw_lw_swing_landing_sound,
-        dedede_special_lw_lw_swing_landing_effect,
+        dedede_special_lw_down_swing_game,
+        dedede_special_lw_down_swing_effect,
+        dedede_special_lw_down_swing_sound,
+        dedede_special_lw_down_swing_landing_game,
+        dedede_special_lw_down_swing_landing_sound,
+        dedede_special_lw_down_swing_landing_effect,
         dedede_special_lw_hi_swing_landing_game,
         dedede_special_lw_hi_swing_landing_sound,
         dedede_special_lw_hi_swing_landing_effect,

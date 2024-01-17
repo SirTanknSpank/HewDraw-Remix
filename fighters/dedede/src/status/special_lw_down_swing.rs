@@ -1,8 +1,6 @@
-use std::f32::consts::E;
-
 use super::*;
 
-unsafe extern "C" fn special_lw_lw_swing_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
+unsafe extern "C" fn special_lw_down_swing_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
     StatusModule::init_settings(
         fighter.module_accessor,
         app::SituationKind(*SITUATION_KIND_NONE),
@@ -36,10 +34,10 @@ unsafe extern "C" fn special_lw_lw_swing_pre(fighter: &mut L2CFighterCommon) -> 
 }
 
 
-unsafe extern "C" fn special_lw_lw_swing_main(fighter: &mut L2CFighterCommon) -> L2CValue{
+unsafe extern "C" fn special_lw_down_swing_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     KineticModule::enable_energy(fighter.module_accessor, *FIGHTER_KINETIC_ENERGY_ID_CONTROL); //This may cause double drift?
     KineticModule::change_kinetic(fighter.module_accessor, *FIGHTER_KINETIC_TYPE_FALL);
-    MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_lw_swing"), 0.0, 1.0, false, 0.0, false, false);
+    MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_down_swing"), 0.0, 1.0, false, 0.0, false, false);
     ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_hammer"), false);
     VisibilityModule::set_int64(fighter.boma(), hash40("hammer") as i64, hash40("hammer_disp_off") as i64);
     if !ArticleModule::is_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER){
@@ -53,11 +51,11 @@ unsafe extern "C" fn special_lw_lw_swing_main(fighter: &mut L2CFighterCommon) ->
     ArticleModule::set_rate(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, 0.7);
     LinkModule::set_model_constraint_pos_ort(article_boma, *LINK_NO_ARTICLE, Hash40::new("have"), Hash40::new("haver"),   *CONSTRAINT_FLAG_ORIENTATION as u32 | *CONSTRAINT_FLAG_POSITION as u32, false);    
 
-    fighter.sub_shift_status_main(L2CValue::Ptr(special_lw_lw_swing_main_loop as *const () as _))
+    fighter.sub_shift_status_main(L2CValue::Ptr(special_lw_down_swing_main_loop as *const () as _))
 
 }
 
-unsafe extern "C" fn special_lw_lw_swing_main_loop(fighter: &mut L2CFighterCommon) -> L2CValue {
+unsafe extern "C" fn special_lw_down_swing_main_loop(fighter: &mut L2CFighterCommon) -> L2CValue {
     if CancelModule::is_enable_cancel(fighter.module_accessor) {
         if fighter.sub_wait_ground_check_common(false.into()).get_bool()
         || fighter.sub_air_check_fall_common().get_bool() {
@@ -67,7 +65,7 @@ unsafe extern "C" fn special_lw_lw_swing_main_loop(fighter: &mut L2CFighterCommo
     if StatusModule::is_situation_changed(fighter.module_accessor){
         if fighter.is_situation(*SITUATION_KIND_GROUND){
             if MotionModule::frame(fighter.module_accessor) < 45.0 && !fighter.is_motion(Hash40::new("landing_heavy")){
-                MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_lw_swing_landing"), 0.0, 1.0, false, 0.0, false, false);
+                MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_down_swing_landing"), 0.0, 1.0, false, 0.0, false, false);
             }
             else{
                 ArticleModule::remove_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
@@ -88,12 +86,6 @@ unsafe extern "C" fn special_lw_lw_swing_main_loop(fighter: &mut L2CFighterCommo
             fighter.change_status(FIGHTER_STATUS_KIND_FALL.into(), false.into());
         }
     }
-    if fighter.is_situation(*SITUATION_KIND_GROUND){
-        if MotionModule::frame(fighter.module_accessor) == 3.0{
-            //ArticleModule::remove_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
-            //ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_hammer"), true);
-        }
-    }
     else{
         if MotionModule::frame(fighter.module_accessor) == 40.0{
             ArticleModule::remove_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
@@ -105,8 +97,10 @@ unsafe extern "C" fn special_lw_lw_swing_main_loop(fighter: &mut L2CFighterCommo
 }
 
 
-unsafe extern "C" fn special_lw_lw_swing_end(fighter: &mut L2CFighterCommon) -> L2CValue{
+unsafe extern "C" fn special_lw_down_swing_end(fighter: &mut L2CFighterCommon) -> L2CValue{
     VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, 0.0);
+    ArticleModule::remove_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
+    ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_hammer"), true);
 
     0.into()
 }
@@ -114,10 +108,10 @@ unsafe extern "C" fn special_lw_lw_swing_end(fighter: &mut L2CFighterCommon) -> 
 pub fn install(){
     CustomStatusManager::add_new_agent_status_script(
         Hash40::new("fighter_kind_dedede"),
-        statuses::dedede::SPEICIAL_LW_LW_SWING,
+        statuses::dedede::SPECIAL_LW_DOWN_SWING,
         StatusInfo::new()
-            .with_pre(special_lw_lw_swing_pre)
-            .with_main(special_lw_lw_swing_main)
-            .with_end(special_lw_lw_swing_end)
+            .with_pre(special_lw_down_swing_pre)
+            .with_main(special_lw_down_swing_main)
+            .with_end(special_lw_down_swing_end)
     );
 }

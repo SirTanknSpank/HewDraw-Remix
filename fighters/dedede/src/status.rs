@@ -2,7 +2,7 @@ use super::*;
 use globals::*;
 
 mod special_lw_hi_swing;
-mod special_lw_lw_swing;
+mod special_lw_down_swing;
 
 #[smashline::fighter_init]
 fn dedede_init(fighter: &mut L2CFighterCommon){
@@ -84,7 +84,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     }
 
     if ControlModule::get_stick_y(fighter. module_accessor) < -0.5 && fighter.is_situation(*SITUATION_KIND_AIR){
-        let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_LW_SWING);
+        let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_DOWN_SWING);
         let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
 
         VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
@@ -93,7 +93,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
         return 0.into();
     }
     else if ControlModule::get_stick_y(fighter. module_accessor) > 0.5 {
-        let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPEICIAL_LW_HI_SWING);
+        let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_HI_SWING);
         let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
 
         VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
@@ -170,6 +170,6 @@ pub fn install(){
 }
 
 pub fn add_statuses(){
-    special_lw_lw_swing::install();
+    special_lw_down_swing::install();
     special_lw_hi_swing::install();
 }
