@@ -21,10 +21,22 @@ fn dedede_init(fighter: &mut L2CFighterCommon){
 // Prevent going into air jet hammer when Special is released during Jumpsquat
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP_SQUAT, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_jump_squat_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
-    if ControlModule::check_button_off(fighter.module_accessor, *CONTROL_PAD_BUTTON_SPECIAL){
-        StatusModule::change_status_force(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, true);
+    if ControlModule::check_button_off(fighter.module_accessor, *CONTROL_PAD_BUTTON_JUMP)
+        || ControlModule::is_jump_mini_button(fighter.module_accessor){
+            VarModule::on_flag(fighter.battle_object, vars::dedede::instance::JET_MINI_JUMP);
     }
+    
     return 0.into();
+}
+
+#[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
+unsafe fn special_lw_jump_main(fighter: &mut L2CFighterCommon) -> L2CValue{
+    if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_MINI_JUMP){
+        KineticModule::add_speed(fighter.module_accessor, &Vector3f::new(0.0, -2.5, 0.0));
+        VarModule::off_flag(fighter.battle_object, vars::dedede::instance::JET_MINI_JUMP);
+    }
+    
+    return original!(fighter);
 }
 
 #[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
@@ -35,7 +47,23 @@ unsafe fn special_lw_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
     return original!(fighter);
 }
 
+#[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
+unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
+    if (ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_JUMP) || ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_JUMP_MINI))
+    && fighter.is_situation(*SITUATION_KIND_GROUND)
+    && fighter.motion_frame() > 8.0{
+        StatusModule::change_status_force(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP_SQUAT, true);
+        ArticleModule::change_motion(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("wait"), false, 0.0);
+        ArticleModule::change_status(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, *WEAPON_DEDEDE_JETHAMMER_STATUS_KIND_WAIT, ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
+        WorkModule::on_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_START);
+        let sound = SoundModule::play_se(fighter.module_accessor, Hash40::new("se_dedede_special_l02"), true, false, false, false, smash::app::enSEType(0));
+        WorkModule::set_int(fighter.module_accessor, sound as i32,  *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_INT_SE_HANDLE);
+    }
 
+
+
+    return original!(fighter);
+}
 
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
 unsafe fn special_lw_attack_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
@@ -160,10 +188,12 @@ pub fn install(){
     smashline::install_agent_init_callbacks!(dedede_init);
     smashline::install_status_scripts!(
         special_lw_jump_squat_exec,
+        special_lw_jump_main,
         special_lw_attack_pre,
         special_lw_attack_main,
         special_lw_attack_exec,
         special_lw_pre,
+        special_lw_exec,
         dedede_gordo_dead_end,
         dedede_special_hi_status_main,
     );

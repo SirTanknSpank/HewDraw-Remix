@@ -64,7 +64,7 @@ unsafe extern "C" fn special_lw_down_swing_main_loop(fighter: &mut L2CFighterCom
     }
     if StatusModule::is_situation_changed(fighter.module_accessor){
         if fighter.is_situation(*SITUATION_KIND_GROUND){
-            if MotionModule::frame(fighter.module_accessor) < 45.0 && !fighter.is_motion(Hash40::new("landing_heavy")){
+            if MotionModule::frame(fighter.module_accessor) < 50.0 && !fighter.is_motion(Hash40::new("landing_heavy")){
                 MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_down_swing_landing"), 0.0, 1.0, false, 0.0, false, false);
             }
             else{
