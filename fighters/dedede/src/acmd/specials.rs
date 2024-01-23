@@ -327,6 +327,34 @@ unsafe fn dedede_special_air_s_get_effect(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", script = "expression_specialsget", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_s_get_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 18.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_attackl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "expression_specialairsget", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_air_s_get_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 18.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_attackl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
 #[acmd_script( agent = "dedede", script = "game_speciallwstart", category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_lw_start_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
@@ -598,6 +626,19 @@ unsafe fn dedede_special_lw_down_swing_effect(fighter: &mut L2CAgentBase){
     }
 }
 
+#[acmd_script( agent = "dedede", script = "expression_speciallwdownswing" , category = ACMD_EXPRESSION , low_priority)]
+unsafe fn dedede_special_lw_down_swing_expression(fighter: &mut L2CAgentBase){
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 20.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitm"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 22.0);
+    if is_excute(fighter) {
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attackm"), 0);
+    }
+}
 #[acmd_script( agent = "dedede", script = "game_speciallwdownswinglanding" , category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_lw_down_swing_landing_game(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
@@ -723,6 +764,31 @@ unsafe fn dedede_special_lw_hi_swing_effect(fighter: &mut L2CAgentBase){
     }
 }
 
+#[acmd_script( agent = "dedede", script = "expression_speciallwhiswing" , category = ACMD_EXPRESSION , low_priority)]
+unsafe fn dedede_special_lw_hi_swing_expression(fighter: &mut L2CAgentBase){
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 7.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 11.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_LR, 4);
+    }
+    frame(lua_state, 15.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohitl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 17.0);
+    if is_excute(fighter) {
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attackl"), 0);
+    }
+}
+
 #[acmd_script( agent = "dedede", script = "game_speciallwjumpsquat" , category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_lw_jump_squat_game(fighter: &mut L2CAgentBase){
     let lua_state = fighter.lua_state_agent;
@@ -761,6 +827,18 @@ unsafe fn dedede_special_hi_jump_game(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", scripts = ["game_specialhistartr", "game_specialhistartl"] , category = ACMD_GAME , low_priority)]
+unsafe fn dedede_special_hi_start_game(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+
+    FT_MOTION_RATE(fighter, 0.809);
+    if is_excute(fighter){
+        KineticModule::clear_speed_all(boma);
+    }
+    frame(lua_state, 21.0);
+    FT_MOTION_RATE(fighter, 1.0);
+}
 
 #[acmd_script( agent = "dedede", scripts = ["game_specialhilandingr", "game_specialhilandingl"] , category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_hi_landing_game(fighter: &mut L2CAgentBase) {
@@ -850,6 +928,9 @@ pub fn install() {
         dedede_special_air_s_get_game,
         dedede_special_s_get_effect,
         dedede_special_air_s_get_effect,
+        dedede_special_s_get_expression,
+        dedede_special_air_s_get_expression,
+        
 
         dedede_special_lw_start_game,
         dedede_special_air_lw_start_game,
@@ -868,6 +949,7 @@ pub fn install() {
         dedede_special_lw_down_swing_game,
         dedede_special_lw_down_swing_effect,
         dedede_special_lw_down_swing_sound,
+        dedede_special_lw_down_swing_expression,
         dedede_special_lw_down_swing_landing_game,
         dedede_special_lw_down_swing_landing_sound,
         dedede_special_lw_down_swing_landing_effect,
@@ -877,8 +959,10 @@ pub fn install() {
         dedede_special_lw_hi_swing_game,
         dedede_special_lw_hi_swing_sound,
         dedede_special_lw_hi_swing_effect,
+        dedede_special_lw_hi_swing_expression,
         dedede_special_lw_jump_squat_game,
 
+        dedede_special_hi_start_game,
         dedede_special_hi_jump_game,
         dedede_special_hi_landing_game,
         dedede_special_hi_turn_game,
