@@ -408,7 +408,7 @@ unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     }
     frame(lua_state, 15.0);
     if is_excute(fighter) {
-        FT_MOTION_RATE(fighter, 30.0/(60.0-15.0));
+        FT_MOTION_RATE(fighter, 36.0/(60.0-15.0));
     }
     frame(lua_state, 60.0);
     if is_excute(fighter) {

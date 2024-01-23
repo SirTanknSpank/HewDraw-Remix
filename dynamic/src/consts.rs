@@ -387,6 +387,8 @@ pub mod vars {
             pub const IS_ANGLED_FLAG: i32 = 0x0102;
             pub const IS_REMOVED_FLAG: i32 = 0x0103;
             pub const JET_MINI_JUMP: i32 = 0x0108;
+            pub const EQUIP_MASK: i32 = 0x0109;
+
 
             //ints
             pub const RECATCH_COUNTER: i32 = 0x0104;
