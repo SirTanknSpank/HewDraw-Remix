@@ -139,26 +139,36 @@ unsafe fn mask_toggle(fighter: &mut L2CFighterCommon, boma: &mut BattleObjectMod
     let mask_is_equipped = VarModule::is_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
     let mask_is_exist = ArticleModule::is_exist(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
 
-    if fighter.is_motion_one_of(&[Hash40::new("appeal_lw_l"), Hash40::new("appeal_lw_r")])
-    && frame as i32 == 45 {
+    if fighter.is_motion(Hash40::new("appeal_lw_r"))
+    && frame as i32 == 35 {
         if mask_is_equipped { // take off mask
             VarModule::off_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
         } else { // put on mask
             VarModule::on_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
         }
-    } 
+    }
+    else if fighter.is_motion(Hash40::new("appeal_lw_l"))
+    && frame as i32 == 72{
+        if mask_is_equipped { // take off mask
+            VarModule::off_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
+        } else { // put on mask
+            VarModule::on_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
+        }
+    }
+    //Model scale on the mask during up tilt 
     else if fighter.is_motion(Hash40::new("attack_hi3"))
     && mask_is_equipped{
         let article = ArticleModule::get_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
         let article_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
         let article_boma = sv_battle_object::module_accessor(article_id);
-        if (fighter.motion_frame() > 7.0 && fighter.motion_frame() < 17.0) {
-             ModelModule::set_scale(article_boma, 1.3);
+        if (fighter.motion_frame() > 7.0 && fighter.motion_frame() < 16.0) {
+            ModelModule::set_scale(article_boma, 1.3);
         }
         else{
             ModelModule::set_scale(article_boma, 1.1);
         }
     }
+    //Removing shaking from ftilt, dair, up air with the mask on
     else if fighter.is_motion_one_of(&[Hash40::new("attack_s3_s"), Hash40::new("attack_air_hi"), Hash40::new("attack_air_lw")])
     && mask_is_equipped{
         ShakeModule::stop(boma);
