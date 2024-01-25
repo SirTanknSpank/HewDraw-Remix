@@ -40,7 +40,7 @@ unsafe extern "C" fn special_lw_hi_swing_main(fighter: &mut L2CFighterCommon) ->
     ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_hammer"), false);
 
     if fighter.is_situation(*SITUATION_KIND_AIR){
-        KineticModule::enable_energy(fighter.module_accessor, *FIGHTER_KINETIC_ENERGY_ID_CONTROL); //This may cause double drift?
+        KineticModule::enable_energy(fighter.module_accessor, *FIGHTER_KINETIC_ENERGY_ID_CONTROL); 
         KineticModule::change_kinetic(fighter.module_accessor, *FIGHTER_KINETIC_TYPE_FALL);    
     }
     else{
@@ -57,8 +57,6 @@ unsafe extern "C" fn special_lw_hi_swing_main(fighter: &mut L2CFighterCommon) ->
     ArticleModule::change_motion(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, Hash40::new("attack"), false, 0.0);
     LinkModule::set_model_constraint_pos_ort(article_boma, *LINK_NO_ARTICLE, Hash40::new("have"), Hash40::new("haver"),  *CONSTRAINT_FLAG_POSITION as u32 | *CONSTRAINT_FLAG_ORIENTATION as u32, false);   
     ArticleModule::set_rate(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, 0.8);
- 
-
 
     fighter.sub_shift_status_main(L2CValue::Ptr(special_lw_hi_swing_main_loop as *const () as _))
 

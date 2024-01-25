@@ -138,26 +138,34 @@ unsafe fn gordo_recatch(boma: &mut BattleObjectModuleAccessor, frame: f32, fight
 unsafe fn mask_toggle(fighter: &mut L2CFighterCommon, boma: &mut BattleObjectModuleAccessor, frame: f32) {
     let mask_is_equipped = VarModule::is_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
     let mask_is_exist = ArticleModule::is_exist(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
-
-    if fighter.is_motion(Hash40::new("appeal_lw_r"))
-    && frame as i32 == 35 {
-        if mask_is_equipped { // take off mask
-            VarModule::off_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
-        } else { // put on mask
-            VarModule::on_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
+    if fighter.is_motion(Hash40::new("appeal_s_r")){
+        if frame as i32 <= 2{
+            if !mask_is_exist{
+                ArticleModule::generate_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK, false, -1);
+                let article = ArticleModule::get_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
+                let article_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
+                let article_boma = sv_battle_object::module_accessor(article_id);
+                ModelModule::set_scale(article_boma, 1.1);
+                LinkModule::set_model_constraint_pos_ort(article_boma, *LINK_NO_ARTICLE, Hash40::new("attach"), Hash40::new("havel"),  *CONSTRAINT_FLAG_POSITION as u32 | *CONSTRAINT_FLAG_ORIENTATION as u32, false); 
+            }
         }
-    }
-    else if fighter.is_motion(Hash40::new("appeal_lw_l"))
-    && frame as i32 == 72{
-        if mask_is_equipped { // take off mask
-            VarModule::off_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
-        } else { // put on mask
-            VarModule::on_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
-        }
+        if frame as i32 == 12{
+            if !mask_is_equipped && mask_is_exist{
+                let article = ArticleModule::get_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
+                let article_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
+                let article_boma = sv_battle_object::module_accessor(article_id);
+                LinkModule::set_model_constraint_pos_ort(article_boma, *LINK_NO_ARTICLE, Hash40::new("have"), Hash40::new("head"),  *CONSTRAINT_FLAG_POSITION as u32 | *CONSTRAINT_FLAG_ORIENTATION as u32, false); 
+                VarModule::on_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
+            }
+            else{
+                ArticleModule::remove_exist(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK, app::ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
+                VarModule::off_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
+            }
+        }    
     }
     //Model scale on the mask during up tilt 
     else if fighter.is_motion(Hash40::new("attack_hi3"))
-    && mask_is_equipped{
+    && mask_is_exist{
         let article = ArticleModule::get_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
         let article_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
         let article_boma = sv_battle_object::module_accessor(article_id);
@@ -168,23 +176,15 @@ unsafe fn mask_toggle(fighter: &mut L2CFighterCommon, boma: &mut BattleObjectMod
             ModelModule::set_scale(article_boma, 1.1);
         }
     }
-    //Removing shaking from ftilt, dair, up air with the mask on
-    else if fighter.is_motion_one_of(&[Hash40::new("attack_s3_s"), Hash40::new("attack_air_hi"), Hash40::new("attack_air_lw")])
-    && mask_is_equipped{
+    //Removing shaking from ftilt, dair, up air, rapid jab with the mask on
+    else if fighter.is_motion_one_of(&[Hash40::new("attack_s3_s"), Hash40::new("attack_air_hi"), Hash40::new("attack_air_lw"), Hash40::new("attack_100")])
+    && mask_is_exist{
         ShakeModule::stop(boma);
     }
-    else {
-        if mask_is_equipped && !mask_is_exist {
-            ArticleModule::generate_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK, false, -1);
-            let article = ArticleModule::get_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK);
-            let article_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
-            let article_boma = sv_battle_object::module_accessor(article_id);
-            ModelModule::set_scale(article_boma, 1.1);
-        } 
-        else if !mask_is_equipped && mask_is_exist
-        && !fighter.is_motion_one_of(&[Hash40::new("entry_l"), Hash40::new("entry_r")]) { // ignore during entry animation
-            ArticleModule::remove_exist(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_MASK, app::ArticleOperationTarget(*ARTICLE_OPE_TARGET_ALL));
-        }
+
+    //ensuring the flag resets when the mask does not exist
+    if mask_is_equipped && !mask_is_exist{
+        VarModule::off_flag(boma.object(), vars::dedede::instance::EQUIP_MASK);
     }
 
     // remove mask on entry and death

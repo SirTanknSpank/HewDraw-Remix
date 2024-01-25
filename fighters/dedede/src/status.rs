@@ -102,9 +102,9 @@ unsafe fn special_lw_attack_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
 unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     if WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX){
-        let max_hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * WorkModule::get_param_float(fighter.module_accessor, hash40("param_special_lw"), hash40("hold_attack_mul"));
 
-        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, max_hold);
+        VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
         WorkModule::off_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
     }
     else{
@@ -113,7 +113,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
 
     if ControlModule::get_stick_y(fighter. module_accessor) < -0.5 && fighter.is_situation(*SITUATION_KIND_AIR){
         let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_DOWN_SWING);
-        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * WorkModule::get_param_float(fighter.module_accessor, hash40("param_special_lw"), hash40("hold_attack_mul"));
 
         VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
         fighter.change_status(swing_status.into(), true.into());
@@ -122,7 +122,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     }
     else if ControlModule::get_stick_y(fighter. module_accessor) > 0.5 {
         let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_HI_SWING);
-        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+        let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * WorkModule::get_param_float(fighter.module_accessor, hash40("param_special_lw"), hash40("hold_attack_mul"));
 
         VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, hold);
         fighter.change_status(swing_status.into(), true.into());
@@ -138,7 +138,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     if WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX){
-        let max_hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * 0.09;
+        let max_hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * WorkModule::get_param_float(fighter.module_accessor, hash40("param_special_lw"), hash40("hold_attack_mul"));
 
         VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, max_hold);
         WorkModule::off_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX);
