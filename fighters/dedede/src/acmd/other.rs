@@ -219,10 +219,6 @@ unsafe fn dedede_gordo_special_s_throw_game(fighter: &mut L2CAgentBase) {
     let gordo_speed_x = KineticModule::get_sum_speed_x(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);    
     
     if is_excute(fighter){
-        if VarModule::is_flag(owner_module_accessor.object(), vars::dedede::instance::IS_DASH_GORDO){
-            PostureModule::reverse_rot_y_lr(boma);
-            PostureModule::reverse_lr(boma);
-        }
         /* Prevents backwards gordos */
         if PostureModule::lr(owner_module_accessor) * gordo_speed_x < 0.0{
             KineticModule::mul_speed(boma, &Vector3f{x: -1.0, y: 1.0,z:  1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
@@ -235,7 +231,7 @@ unsafe fn dedede_gordo_special_s_throw_game(fighter: &mut L2CAgentBase) {
                 if VarModule::is_flag(owner_module_accessor.object(), vars::dedede::instance::IS_DASH_GORDO){
 
                     let bounce_dmg_multiplier = ((WorkModule::get_int(boma, *WEAPON_DEDEDE_GORDO_STATUS_WORK_INT_BOUND_COUNT) as f32 + 2.0) * 0.25);
-                    ATTACK(fighter, 0, 0, Hash40::new("hip"), 7.5 * bounce_dmg_multiplier, 120, 110, 60, 0, 6.2, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_POS, false, -5, 0.0, 0, true, false, false, false, false, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_cutup"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_KICK, *ATTACK_REGION_NONE);
+                    ATTACK(fighter, 0, 0, Hash40::new("hip"), 7.5 * bounce_dmg_multiplier, 60, 110, 60, 0, 6.2, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_POS, false, -5, 0.0, 0, true, false, false, false, false, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_cutup"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_KICK, *ATTACK_REGION_NONE);
                     ATK_SET_SHIELD_SETOFF_MUL(fighter, 0, 0.7);
                     
                     //Reduces the max amount of bounces by 1 per recatch on the same gordo
@@ -338,7 +334,7 @@ unsafe fn dedede_gordo_special_s_attack_game(fighter: &mut L2CAgentBase) {
                     KineticModule::mul_speed(boma, &Vector3f{x: x_speed_mul, y: y_speed_mul , z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL); 
                 }
             }
-        /* Seeing the speed is still the same. This only occurs if the above did not run, which happens on projectiles or non-direct hits (Bayo smash attacks) */
+        /* Seeing if the speed is still the same. This only occurs if the above did not run, which happens on projectiles or non-direct hits (Bayo smash attacks) */
         if speed_x == KineticModule::get_sum_speed_x(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL) &&  speed_y == KineticModule::get_sum_speed_y(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL){
             let damage = DamageModule::damage(boma, 0);
             if damage > 11.0{
@@ -475,6 +471,20 @@ unsafe fn landing_fall_special_sound(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede_jethammer", scripts = ["effect_speciallwattack", "effect_speciallwairattack"], category = ACMD_EFFECT, low_priority )]
+unsafe fn jethammer_special_lw_attack_effect(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 0.0);
+    if is_excute(fighter) {
+        EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack"), Hash40::new("jet9"), 0, 0, 0, 0, 0, 0, 1, true);
+    }
+    frame(lua_state, 9.0);
+    if is_excute(fighter) {
+        EFFECT_FOLLOW(fighter, Hash40::new("dedede_jethammer_attack2"), Hash40::new("hammer"), 0, 0, 0, 0, 0, 0, 1, true);
+    }
+}
+
 pub fn install() {
     install_acmd_scripts!(
         escape_air_game,
@@ -500,6 +510,7 @@ pub fn install() {
         damageflytop_sound,
         fly_game,
         landing_fall_special_sound,
+        jethammer_special_lw_attack_effect,
     );
 }
 
