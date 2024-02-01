@@ -10,8 +10,6 @@ fn dedede_init(fighter: &mut L2CFighterCommon){
         if fighter.global_table[globals::FIGHTER_KIND] != FIGHTER_KIND_DEDEDE{
             return;
         }
-    
-
         VarModule::set_int(fighter.battle_object, vars::dedede::instance::RECATCH_COUNTER, 0);
     }
 }
@@ -60,8 +58,6 @@ unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
         WorkModule::set_int(fighter.module_accessor, sound as i32,  *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_INT_SE_HANDLE);
     }
 
-
-
     return original!(fighter);
 }
 
@@ -92,8 +88,6 @@ unsafe fn special_lw_attack_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
         *FIGHTER_POWER_UP_ATTACK_BIT_SPECIAL_LW as u32,
         0
     );
-
-
 
     return 0.into();
 
@@ -147,7 +141,7 @@ unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     else{
         VarModule::set_float(fighter.battle_object, vars::dedede::instance::ADDED_JET_DAMAGE, 0.0);
     }
-
+    
     ArticleModule::set_flag(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, *WEAPON_DEDEDE_JETHAMMER_STATUS_WORK_FLAG_HOLD_MAX);
 
     return original!(fighter);
@@ -197,9 +191,6 @@ pub fn install(){
         dedede_gordo_dead_end,
         dedede_special_hi_status_main,
     );
-}
-
-pub fn add_statuses(){
     special_lw_down_swing::install();
     special_lw_hi_swing::install();
 }
