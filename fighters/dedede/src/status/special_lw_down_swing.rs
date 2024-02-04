@@ -35,14 +35,18 @@ unsafe extern "C" fn special_lw_down_swing_pre(fighter: &mut L2CFighterCommon) -
 
 
 unsafe extern "C" fn special_lw_down_swing_main(fighter: &mut L2CFighterCommon) -> L2CValue{
-    KineticModule::enable_energy(fighter.module_accessor, *FIGHTER_KINETIC_ENERGY_ID_CONTROL); //This may cause double drift?
+    KineticModule::enable_energy(fighter.module_accessor, *FIGHTER_KINETIC_ENERGY_ID_CONTROL); 
     KineticModule::change_kinetic(fighter.module_accessor, *FIGHTER_KINETIC_TYPE_FALL);
+
     MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_lw_down_swing"), 0.0, 1.0, false, 0.0, false, false);
+    
     ModelModule::set_mesh_visibility(fighter.boma(), Hash40::new("dedede_hammer"), false);
     VisibilityModule::set_int64(fighter.boma(), hash40("hammer") as i64, hash40("hammer_disp_off") as i64);
+
     if !ArticleModule::is_exist(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER){
         ArticleModule::generate_article(fighter.module_accessor, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, -1);
     }
+
     let article = ArticleModule::get_article(fighter.boma(), *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER);
     let object_id = smash::app::lua_bind::Article::get_battle_object_id(article) as u32;
     let article_boma = sv_battle_object::module_accessor(object_id);

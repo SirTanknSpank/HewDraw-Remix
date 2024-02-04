@@ -16,7 +16,7 @@ fn dedede_init(fighter: &mut L2CFighterCommon){
 
 /* SPECIAL LW */
 
-// Prevent going into air jet hammer when Special is released during Jumpsquat
+// Enable Shorthop flag if the jump button isn't pressed or if the SH macro is pressed
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP_SQUAT, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_jump_squat_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     if ControlModule::check_button_off(fighter.module_accessor, *CONTROL_PAD_BUTTON_JUMP)
@@ -27,6 +27,7 @@ unsafe fn special_lw_jump_squat_exec(fighter: &mut L2CFighterCommon) -> L2CValue
     return 0.into();
 }
 
+// Jet hammer shorthop
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_JUMP, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
 unsafe fn special_lw_jump_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     if VarModule::is_flag(fighter.battle_object, vars::dedede::instance::JET_MINI_JUMP){
@@ -37,6 +38,7 @@ unsafe fn special_lw_jump_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     return original!(fighter);
 }
 
+// Reserving momentum when going into jet hammer
 #[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
 unsafe fn special_lw_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
     let x_speed = KineticModule::get_sum_speed_x(fighter.module_accessor, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
@@ -45,6 +47,7 @@ unsafe fn special_lw_pre(fighter: &mut L2CFighterCommon) -> L2CValue{
     return original!(fighter);
 }
 
+// Cancelling grounded jet hammer start into jet hammer jumpsquat
 #[status_script(agent = "dedede", status = *FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     if (ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_JUMP) || ControlModule::check_button_on(fighter.module_accessor, *CONTROL_PAD_BUTTON_JUMP_MINI))
@@ -114,7 +117,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
 
         return 0.into();
     }
-    else if ControlModule::get_stick_y(fighter. module_accessor) > 0.5 {
+    else if ControlModule::get_stick_y(fighter. module_accessor) > 0.5 && fighter.is_situation(*SITUATION_KIND_AIR){
         let swing_status = CustomStatusModule::get_agent_status_kind(fighter.battle_object, statuses::dedede::SPECIAL_LW_HI_SWING);
         let hold = WorkModule::get_float(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT) * WorkModule::get_param_float(fighter.module_accessor, hash40("param_special_lw"), hash40("hold_attack_mul"));
 
@@ -129,6 +132,7 @@ unsafe fn special_lw_attack_main(fighter: &mut L2CFighterCommon) -> L2CValue{
     }
 }
 
+// setting the added jet damage, disabling the max flag if it's on.
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_LW_ATTACK, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
 unsafe fn special_lw_attack_exec(fighter: &mut L2CFighterCommon) -> L2CValue{
     if WorkModule::is_flag(fighter.module_accessor, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_FLAG_HOLD_MAX){
@@ -154,6 +158,7 @@ unsafe fn special_lw_attack_end(fighter: &mut L2CFighterCommon) -> L2CValue{
 
     return 0.into();
 }
+
 /* SPECIAL HI */
 
 #[status_script(agent = "dedede", status = *FIGHTER_DEDEDE_STATUS_KIND_SPECIAL_HI_FAILURE, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
