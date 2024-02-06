@@ -471,6 +471,80 @@ unsafe fn landing_fall_special_sound(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", script = "sound_appealsr", category = ACMD_SOUND, low_priority )]
+unsafe fn appeal_sr_sound(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 20.0);
+    if is_excute(fighter) {
+        PLAY_SE(fighter, Hash40::new("vc_dedede_appeal02"));
+        PLAY_STATUS(fighter, Hash40::new("se_dedede_attack100"));
+    }
+    frame(lua_state, 81.0);
+    if is_excute(fighter) {
+        sound!(fighter, *MA_MSC_CMD_SOUND_STOP_SE_STATUS);
+    }
+    frame(lua_state, 89.0);
+    if is_excute(fighter) {
+        PLAY_SE(fighter, Hash40::new("se_dedede_attack100end"));
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "effect_appealsr", category = ACMD_EFFECT, low_priority )]
+unsafe fn appeal_sr_effect(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 20.0);
+    for _ in 0..2 {
+        if is_excute(fighter) {
+            EFFECT_FOLLOW_ALPHA(fighter, Hash40::new("sys_spin_wind"), Hash40::new("hammer2"), 2, 0, 0, 0, 0, 89, 0.75, true, 0.6);
+        }
+        wait(lua_state, 10.0);
+        if is_excute(fighter) {
+            EFFECT_FOLLOW_ALPHA(fighter, Hash40::new("sys_spin_wind"), Hash40::new("hammer2"), -2, 0, 0, 0, 0, 89, 0.8, true, 0.6);
+        }
+        wait(lua_state, 10.0);
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "expression_appealsr", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn appeal_sr_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 16.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 23.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 30.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 37.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 44.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 51.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 58.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits_l"), 0, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
 #[acmd_script( agent = "dedede_jethammer", scripts = ["effect_speciallwattack", "effect_speciallwairattack"], category = ACMD_EFFECT, low_priority )]
 unsafe fn jethammer_special_lw_attack_effect(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
@@ -511,6 +585,9 @@ pub fn install() {
         fly_game,
         landing_fall_special_sound,
         jethammer_special_lw_attack_effect,
+        appeal_sr_sound,
+        appeal_sr_effect,
+        appeal_sr_expression,
     );
 }
 
