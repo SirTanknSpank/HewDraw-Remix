@@ -303,11 +303,12 @@ unsafe fn dedede_gordo_special_s_attack_game(fighter: &mut L2CAgentBase) {
         WorkModule::set_int(boma, 300, *WEAPON_INSTANCE_WORK_ID_INT_LIFE);
         /* below grabs the boma of the opponent hitting gordo, the attack data of that hit, and adjusts the speed accordingly */
         let num_players = Fighter::get_fighter_entry_count(); 
-        if StopModule::is_hit(boma) && !StopModule::is_damage(boma){ 
+        if StopModule::is_hit(boma)
+        && !StopModule::is_hit(owner_module_accessor) { 
             for i in 0..num_players{
                 let opponent_boma = sv_battle_object::module_accessor(Fighter::get_id_from_entry_id(i));
 
-                if AttackModule::is_infliction(opponent_boma, *COLLISION_KIND_MASK_HIT){
+                if AttackModule::is_infliction(opponent_boma, *COLLISION_KIND_MASK_HIT) {
                     let data = AttackModule::attack_data(opponent_boma, 0, false);
                     let mut angle = (*data).vector as f32;
                     let mut damage = (*data).power;
@@ -334,16 +335,16 @@ unsafe fn dedede_gordo_special_s_attack_game(fighter: &mut L2CAgentBase) {
                     KineticModule::mul_speed(boma, &Vector3f{x: x_speed_mul, y: y_speed_mul , z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL); 
                 }
             }
-        /* Seeing if the speed is still the same. This only occurs if the above did not run, which happens on projectiles or non-direct hits (Bayo smash attacks) */
-        if speed_x == KineticModule::get_sum_speed_x(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL) &&  speed_y == KineticModule::get_sum_speed_y(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL){
-            let damage = DamageModule::damage(boma, 0);
-            if damage > 11.0{
-                KineticModule::mul_speed(boma, &Vector3f{x: 0.8, y: 1.0, z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
+            /* Seeing if the speed is still the same. This only occurs if the above did not run, which happens on projectiles or non-direct hits (Bayo smash attacks) */
+            if speed_x == KineticModule::get_sum_speed_x(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL) &&  speed_y == KineticModule::get_sum_speed_y(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL){
+                let damage = DamageModule::damage(boma, 0);
+                if damage > 11.0{
+                    KineticModule::mul_speed(boma, &Vector3f{x: 0.8, y: 1.0, z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
+                }
+                else{
+                    KineticModule::mul_speed(boma, &Vector3f{x: 0.4 + 0.05 * (damage - 5.0), y: 1.0, z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
+                }
             }
-            else{
-                KineticModule::mul_speed(boma, &Vector3f{x: 0.4 + 0.05 * (damage - 5.0), y: 1.0, z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL);
-            }
-        }
         }
     }
     for _ in 0..301{
