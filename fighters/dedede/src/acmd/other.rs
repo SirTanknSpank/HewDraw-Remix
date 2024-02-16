@@ -234,7 +234,7 @@ unsafe fn dedede_gordo_special_s_throw_game(fighter: &mut L2CAgentBase) {
                 if VarModule::is_flag(owner_module_accessor.object(), vars::dedede::instance::IS_DASH_GORDO){
 
                     let bounce_dmg_multiplier = ((WorkModule::get_int(boma, *WEAPON_DEDEDE_GORDO_STATUS_WORK_INT_BOUND_COUNT) as f32 + 2.0) * 0.25);
-                    ATTACK(fighter, 0, 0, Hash40::new("hip"), 7.5 * bounce_dmg_multiplier, 120, 110, 60, 0, 6.2, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_POS, false, -5, 0.0, 0, true, false, false, false, false, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_cutup"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_KICK, *ATTACK_REGION_NONE);
+                    ATTACK(fighter, 0, 0, Hash40::new("hip"), 7.5 * bounce_dmg_multiplier, 60, 110, 60, 0, 6.2, 0.0, 0.0, 0.0, None, None, None, 1.0, 1.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_POS, false, -5, 0.0, 0, true, false, false, false, false, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_ALL, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_cutup"), *ATTACK_SOUND_LEVEL_L, *COLLISION_SOUND_ATTR_KICK, *ATTACK_REGION_NONE);
                     ATK_SET_SHIELD_SETOFF_MUL(fighter, 0, 0.7);
                     
                     //Reduces the max amount of bounces by 1 per recatch on the same gordo
@@ -306,7 +306,8 @@ unsafe fn dedede_gordo_special_s_attack_game(fighter: &mut L2CAgentBase) {
         WorkModule::set_int(boma, 300, *WEAPON_INSTANCE_WORK_ID_INT_LIFE);
         /* below grabs the boma of the opponent hitting gordo, the attack data of that hit, and adjusts the speed accordingly */
         let num_players = Fighter::get_fighter_entry_count(); 
-        if StopModule::is_hit(boma){ 
+        if StopModule::is_hit(boma)
+        && !StopModule::is_hit(owner_module_accessor) { 
             for i in 0..num_players{
                 let opponent_boma = sv_battle_object::module_accessor(Fighter::get_id_from_entry_id(i));
 
@@ -337,7 +338,7 @@ unsafe fn dedede_gordo_special_s_attack_game(fighter: &mut L2CAgentBase) {
                     KineticModule::mul_speed(boma, &Vector3f{x: x_speed_mul, y: y_speed_mul , z: 1.0}, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL); 
                 }
             }
-        /* Seeing the speed is still the same. This only occurs if the above did not run, which happens on projectiles or non-direct hits (Bayo smash attacks) */
+        /* Seeing if the speed is still the same. This only occurs if the above did not run, which happens on projectiles or non-direct hits (Bayo smash attacks) */
         if speed_x == KineticModule::get_sum_speed_x(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL) &&  speed_y == KineticModule::get_sum_speed_y(boma, *KINETIC_ENERGY_RESERVE_ATTRIBUTE_ALL){
             let damage = DamageModule::damage(boma, 0);
             if damage > 11.0{
@@ -474,6 +475,80 @@ unsafe fn landing_fall_special_sound(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", script = "sound_appealsr", category = ACMD_SOUND, low_priority )]
+unsafe fn appeal_sr_sound(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 20.0);
+    if is_excute(fighter) {
+        PLAY_SE(fighter, Hash40::new("vc_dedede_appeal02"));
+        PLAY_STATUS(fighter, Hash40::new("se_dedede_attack100"));
+    }
+    frame(lua_state, 81.0);
+    if is_excute(fighter) {
+        sound!(fighter, *MA_MSC_CMD_SOUND_STOP_SE_STATUS);
+    }
+    frame(lua_state, 89.0);
+    if is_excute(fighter) {
+        PLAY_SE(fighter, Hash40::new("se_dedede_attack100end"));
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "effect_appealsr", category = ACMD_EFFECT, low_priority )]
+unsafe fn appeal_sr_effect(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    frame(lua_state, 20.0);
+    for _ in 0..2 {
+        if is_excute(fighter) {
+            EFFECT_FOLLOW_ALPHA(fighter, Hash40::new("sys_spin_wind"), Hash40::new("hammer2"), 2, 0, 0, 0, 0, 89, 0.75, true, 0.6);
+        }
+        wait(lua_state, 10.0);
+        if is_excute(fighter) {
+            EFFECT_FOLLOW_ALPHA(fighter, Hash40::new("sys_spin_wind"), Hash40::new("hammer2"), -2, 0, 0, 0, 0, 89, 0.8, true, 0.6);
+        }
+        wait(lua_state, 10.0);
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "expression_appealsr", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn appeal_sr_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 16.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 23.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 30.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 37.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 44.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 51.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits"), 6, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(lua_state, 58.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_nohits_l"), 0, true, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
 pub fn install() {
     install_acmd_scripts!(
         escape_air_game,
@@ -499,6 +574,9 @@ pub fn install() {
         damageflytop_sound,
         fly_game,
         landing_fall_special_sound,
+        appeal_sr_sound,
+        appeal_sr_effect,
+        appeal_sr_expression,
     );
 }
 

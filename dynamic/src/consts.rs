@@ -388,12 +388,15 @@ pub mod vars {
             pub const IS_DASH_GORDO: i32 = 0x0101;
             pub const IS_ANGLED_FLAG: i32 = 0x0102;
             pub const IS_REMOVED_FLAG: i32 = 0x0103;
+            pub const JET_MINI_JUMP: i32 = 0x0104;
+            pub const EQUIP_MASK: i32 = 0x0105;
 
             //ints
-            pub const RECATCH_COUNTER: i32 = 0x0104;
+            pub const RECATCH_COUNTER: i32 = 0x0106;
 
             //floats
-            pub const INHALE_STICK_Y: i32 = 0x0105;
+            pub const INHALE_STICK_Y: i32 = 0x0107;
+            pub const PRE_JETHAMMER_SPEED_X: i32 = 0x0108;
         }
     }
     pub mod demon {

@@ -327,13 +327,41 @@ unsafe fn dedede_special_air_s_get_effect(fighter: &mut L2CAgentBase) {
     }
 }
 
+#[acmd_script( agent = "dedede", script = "expression_specialsget", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_s_get_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 18.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_attackl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
+#[acmd_script( agent = "dedede", script = "expression_specialairsget", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn dedede_special_air_s_get_expression(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        ItemModule::set_have_item_visibility(boma, false, 0);
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(lua_state, 18.0);
+    if is_excute(fighter) {
+        ControlModule::set_rumble(boma, Hash40::new("rbkind_attackl"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
 #[acmd_script( agent = "dedede", scripts = ["game_speciallwstart", "game_specialairlwstart"] , category = ACMD_GAME , low_priority)]
 unsafe fn dedede_special_lw_start_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
 
     if is_excute(fighter){
-        FT_MOTION_RATE(fighter, 13.0/(18.0-1.0));
+        FT_MOTION_RATE(fighter, 8.0/(18.0-1.0));
         ArticleModule::generate_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, -1);
     }
 }
@@ -353,7 +381,13 @@ unsafe fn dedede_special_air_lw_start_game(fighter: &mut L2CAgentBase) {
 unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
-    let rush_speed = 0.6 + 0.01*WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
+    let rush_speed = 1.3 + 0.008 * WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);;
+    let x_speed = VarModule::get_float(fighter.battle_object, vars::dedede::instance::PRE_JETHAMMER_SPEED_X);
+
+
+    if is_excute(fighter) {
+        KineticModule::add_speed(fighter.module_accessor, &Vector3f{x: x_speed/2.0, y: 0.0, z:0.0});
+    }
     frame(lua_state, 1.0);
     if is_excute(fighter) {
         FT_MOTION_RATE(fighter, 7.0/(10.0-1.0));
@@ -373,7 +407,7 @@ unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     }
     frame(lua_state, 15.0);
     if is_excute(fighter) {
-        FT_MOTION_RATE(fighter, 43.0/(60.0-15.0));
+        FT_MOTION_RATE(fighter, 36.0/(60.0-15.0));
     }
     frame(lua_state, 60.0);
     if is_excute(fighter) {
@@ -416,7 +450,8 @@ unsafe fn dedede_special_lw_max_game(fighter: &mut L2CAgentBase) {
 unsafe fn dedede_special_air_lw_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
-    let rush_speed = 0.6 + 0.01*WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
+    let rush_speed = 0.2 + 0.0075 *WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);
+
     frame(lua_state, 1.0);
     if is_excute(fighter) {
         FT_MOTION_RATE(fighter, 7.0/(10.0-1.0));
@@ -436,7 +471,7 @@ unsafe fn dedede_special_air_lw_game(fighter: &mut L2CAgentBase) {
     }
     frame(lua_state, 15.0);
     if is_excute(fighter) {
-        FT_MOTION_RATE(fighter, 43.0/(60.0-15.0));
+        FT_MOTION_RATE(fighter, 36.0/(60.0-15.0));
     }
     frame(lua_state, 60.0);
     if is_excute(fighter) {
@@ -601,6 +636,8 @@ pub fn install() {
         dedede_special_air_s_get_game,
         dedede_special_s_get_effect,
         dedede_special_air_s_get_effect,
+        dedede_special_s_get_expression,
+        dedede_special_air_s_get_expression,
         dedede_special_lw_start_game,
         dedede_special_air_lw_start_game,
         dedede_special_lw_game,
