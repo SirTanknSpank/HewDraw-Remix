@@ -359,10 +359,12 @@ unsafe fn dedede_special_air_s_get_expression(fighter: &mut L2CAgentBase) {
 unsafe fn dedede_special_lw_start_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
+    let x_speed = VarModule::get_float(fighter.battle_object, vars::dedede::instance::PRE_JETHAMMER_SPEED_X);
 
     if is_excute(fighter){
         FT_MOTION_RATE(fighter, 8.0/(18.0-1.0));
         ArticleModule::generate_article(boma, *FIGHTER_DEDEDE_GENERATE_ARTICLE_JETHAMMER, false, -1);
+        KineticModule::add_speed(fighter.module_accessor, &Vector3f{x: x_speed/4.0, y: 0.0, z:0.0});
     }
 }
 
@@ -381,13 +383,8 @@ unsafe fn dedede_special_air_lw_start_game(fighter: &mut L2CAgentBase) {
 unsafe fn dedede_special_lw_game(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
-    let rush_speed = 1.3 + 0.008 * WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);;
-    let x_speed = VarModule::get_float(fighter.battle_object, vars::dedede::instance::PRE_JETHAMMER_SPEED_X);
+    let rush_speed = 2.0 + 0.008 * WorkModule::get_float(boma, *FIGHTER_DEDEDE_STATUS_JET_HAMMER_WORK_FLOAT_HOLD_COUNT);;
 
-
-    if is_excute(fighter) {
-        KineticModule::add_speed(fighter.module_accessor, &Vector3f{x: x_speed/2.0, y: 0.0, z:0.0});
-    }
     frame(lua_state, 1.0);
     if is_excute(fighter) {
         FT_MOTION_RATE(fighter, 7.0/(10.0-1.0));
