@@ -42,9 +42,6 @@ unsafe extern "C" fn special_n_r_main(fighter: &mut L2CFighterCommon) -> L2CValu
     if VarModule::get_int(fighter.object(), vars::palutena::instance::POWER_BOARD_SLOT_2) == 1 {
         VarModule::on_flag(fighter.object(), vars::palutena::instance::POWERED);
     }
-    if fighter.kind() == *FIGHTER_KIND_KIRBY {
-        HIT_NODE(fighter, Hash40::new("virtualweakpoint"), *HIT_STATUS_OFF);
-    }
     
     fighter.main_shift(special_n_r_main_loop)
 }
@@ -128,9 +125,6 @@ unsafe extern "C" fn special_n_b_main(fighter: &mut L2CFighterCommon) -> L2CValu
     }
     if VarModule::get_int(fighter.object(), vars::palutena::instance::POWER_BOARD_SLOT_2) == 2 {
         VarModule::on_flag(fighter.object(), vars::palutena::instance::POWERED);
-    }
-    if fighter.kind() == *FIGHTER_KIND_KIRBY {
-        HIT_NODE(fighter, Hash40::new("virtualweakpoint"), *HIT_STATUS_OFF);
     }
     
     fighter.main_shift(special_n_b_main_loop)
@@ -216,9 +210,6 @@ unsafe extern "C" fn special_n_y_main(fighter: &mut L2CFighterCommon) -> L2CValu
     if VarModule::get_int(fighter.object(), vars::palutena::instance::POWER_BOARD_SLOT_2) == 3 {
         VarModule::on_flag(fighter.object(), vars::palutena::instance::POWERED);
     }
-    if fighter.kind() == *FIGHTER_KIND_KIRBY {
-        HIT_NODE(fighter, Hash40::new("virtualweakpoint"), *HIT_STATUS_OFF);
-    }
     
     fighter.main_shift(special_n_y_main_loop)
 }
@@ -299,9 +290,6 @@ unsafe extern "C" fn special_n_p_main(fighter: &mut L2CFighterCommon) -> L2CValu
     }
     else {
         MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_air_n_p"), 0.0, 1.0, false, 0.0, false, false);
-    }
-    if fighter.kind() == *FIGHTER_KIND_KIRBY {
-        HIT_NODE(fighter, Hash40::new("virtualweakpoint"), *HIT_STATUS_OFF);
     }
     
     fighter.main_shift(special_n_p_main_loop)
@@ -385,9 +373,6 @@ unsafe extern "C" fn special_n_o_main(fighter: &mut L2CFighterCommon) -> L2CValu
     else {
         MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_air_n_o"), 0.0, 1.0, false, 0.0, false, false);
     }
-    if fighter.kind() == *FIGHTER_KIND_KIRBY {
-        HIT_NODE(fighter, Hash40::new("virtualweakpoint"), *HIT_STATUS_OFF);
-    }
     
     fighter.main_shift(special_n_o_main_loop)
 }
@@ -468,9 +453,6 @@ unsafe extern "C" fn special_n_g_main(fighter: &mut L2CFighterCommon) -> L2CValu
     }
     else {
         MotionModule::change_motion(fighter.module_accessor, Hash40::new("special_air_n_g"), 0.0, 1.0, false, 0.0, false, false);
-    }
-    if fighter.kind() == *FIGHTER_KIND_KIRBY {
-        HIT_NODE(fighter, Hash40::new("virtualweakpoint"), *HIT_STATUS_OFF);
     }
     
     fighter.main_shift(special_n_g_main_loop)

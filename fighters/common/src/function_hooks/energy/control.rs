@@ -96,7 +96,7 @@ impl DerefMut for FighterKineticEnergyControl {
     }
 }
 
-#[skyline::hook(offset = 0x6d3630)]
+#[skyline::hook(offset = 0x6d3610)]
 unsafe fn control_update(energy: &mut FighterKineticEnergyControl, boma: &mut BattleObjectModuleAccessor) {
     let reset_type = std::mem::transmute(energy.energy_reset_type);
 
@@ -378,7 +378,7 @@ unsafe fn control_update(energy: &mut FighterKineticEnergyControl, boma: &mut Ba
     energy.speed_brake = backup_brake;
 }
 
-#[skyline::hook(offset = 0x6d4060)]
+#[skyline::hook(offset = 0x6d4040)]
 unsafe fn control_initialize(energy: &mut FighterKineticEnergyControl, boma: &mut BattleObjectModuleAccessor) {
     use EnergyControllerResetType::*;
     let reset_type = std::mem::transmute(energy.energy_reset_type);
@@ -565,7 +565,7 @@ unsafe fn control_initialize(energy: &mut FighterKineticEnergyControl, boma: &mu
     }
 }
 
-#[skyline::hook(offset = 0x6d4bc0)]
+#[skyline::hook(offset = 0x6d4ba0)]
 unsafe fn control_setup(energy: &mut FighterKineticEnergyControl, reset_type: EnergyControllerResetType, initial_speed: &Vector3f, unk: u64, boma: &mut BattleObjectModuleAccessor) {
     energy.clear_energy();
 
