@@ -1,7 +1,7 @@
 use skyline::hooks::InlineCtx;
 use std::fmt::Display;
 
-#[skyline::from_offset(0x37a1270)]
+#[skyline::from_offset(0x37a1ef0)]
 pub unsafe fn set_text_string(pane: u64, string: *const u8);
 
 pub unsafe fn get_pane_by_name(arg: u64, arg2: *const u8) -> [u64; 4] {
@@ -75,7 +75,7 @@ where
     );
 }
 
-#[skyline::hook(offset = 0x1887700, inline)]
+#[skyline::hook(offset = 0x18881d0, inline)]
 unsafe fn update_room_hook(_: &skyline::hooks::InlineCtx) {
     static mut CURRENT_COUNTER: usize = 0;
     if ninput::any::is_press(ninput::Buttons::RIGHT) {

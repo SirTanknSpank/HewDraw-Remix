@@ -374,10 +374,10 @@ pub mod vars {
         pub mod instance {
             // flags
             pub use super::super::roy::instance::TRAIL_EFFECT;
+            pub const SOARING_SLASH_HIT: i32 = 0x0100;
         }
         pub mod status {
             // flags
-            pub const SOARING_SLASH_HIT: i32 = 0x1100;
             pub const SOARING_SLASH_CANCEL: i32 = 0x1101;
         }
     }
@@ -913,6 +913,7 @@ pub mod vars {
         pub mod instance {
             // flags
             pub const SPECIAL_HI_CANCEL_ESCAPE_AIR: i32 = 0x0100;
+            pub const SPECIAL_S_PIKMIN_DETONATE_IS_DETACH_FOR_DETONATE: i32 = 0x0101;
         }
         pub mod status {
             // flags
