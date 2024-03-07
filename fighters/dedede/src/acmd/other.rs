@@ -452,8 +452,7 @@ unsafe extern "C" fn landing_fall_special_sound(fighter: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "dedede", script = "sound_appealsr", category = ACMD_SOUND, low_priority )]
-unsafe fn appeal_sr_sound(fighter: &mut L2CAgentBase) {
+unsafe extern "C" fn appeal_sr_sound(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
     frame(lua_state, 20.0);
@@ -471,8 +470,7 @@ unsafe fn appeal_sr_sound(fighter: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "dedede", script = "effect_appealsr", category = ACMD_EFFECT, low_priority )]
-unsafe fn appeal_sr_effect(fighter: &mut L2CAgentBase) {
+unsafe extern "C" fn appeal_sr_effect(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
     frame(lua_state, 20.0);
@@ -488,8 +486,7 @@ unsafe fn appeal_sr_effect(fighter: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "dedede", script = "expression_appealsr", category = ACMD_EXPRESSION, low_priority )]
-unsafe fn appeal_sr_expression(fighter: &mut L2CAgentBase) {
+unsafe extern "C" fn appeal_sr_expression(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
     let boma = fighter.boma();
     if is_excute(fighter) {
@@ -555,5 +552,8 @@ pub fn install() {
         .acmd("game_escapeair", escape_air_game)
         .acmd("game_escapeairslide", escape_air_slide_game)
         .acmd("sound_landingfallspecial", landing_fall_special_sound)
+        .acmd("appeal_sr_expression", appeal_sr_expression)
+        .acmd("appeal_sr_effect", appeal_sr_effect)
+        .acmd("appeal_sr_sound", appeal_sr_sound)
         .install();
 }
